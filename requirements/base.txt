@@ -1,0 +1,14 @@
+django==1.7
+PyMySQL==0.6.2
+django-dotenv==1.2
+django-filter==0.7
+djangorestframework==2.3.13
+git+git://github.com/edilio/django-rest-swagger.git
+python-memcached==1.53
+gunicorn==18.0
+importlib==1.0.3
+python-social-auth==0.2.1
+Pillow==2.6.1
+django-mail-queue==2.1.2
+Fabric==1.10.0
+django-robots==1.0
