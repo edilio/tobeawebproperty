@@ -11,3 +11,7 @@ class UserProfile(AbstractUser):
     def save(self, *args, **kwargs):
         self.edit_date = timezone.now()
         super(UserProfile, self).save(*args, **kwargs)
+
+
+
+
