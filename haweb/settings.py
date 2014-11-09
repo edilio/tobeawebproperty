@@ -20,8 +20,6 @@ dotenv.read_dotenv(env_file)
 DEBUG = bool(int(os.environ.get('DEBUG', '0')))
 TEMPLATE_DEBUG = DEBUG
 
-print "debug", DEBUG
-
 
 ADMINS = (
     ('Edilio', 'edilio73@gmail.com'),
