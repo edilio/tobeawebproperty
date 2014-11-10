@@ -22,6 +22,9 @@ class FAQ(models.Model):
     question = models.CharField(max_length=250)
     answer = models.TextField()
 
+    class Meta:
+        ordering = ['index']
+
     def __unicode__(self):
         return self.question[:25]
 
@@ -40,6 +43,9 @@ class HelpfulLink(models.Model):
     url = models.URLField()
     description = models.TextField()
 
+    class Meta:
+        ordering = ['index']
+
     def __unicode__(self):
         return self.title
 
@@ -57,6 +63,9 @@ class Career(models.Model):
     title = models.CharField(max_length=250)
     description = models.TextField()
 
+    class Meta:
+        ordering = ['index']
+
     def __unicode__(self):
         return self.title
 
@@ -69,5 +78,33 @@ class ResourceCategory(models.Model):
     index = models.PositiveIntegerField(default=next_career_index)
     name = models.CharField(max_length=250)
 
+    class Meta:
+        ordering = ['index']
+        verbose_name_plural = "categories"
+        verbose_name = "category"
+
     def __unicode__(self):
         return self.title
+
+
+def next_resource_index():
+    return next_index('ResourceForm')
+
+
+class ResourceForm(models.Model):
+    index = models.PositiveIntegerField(default=next_resource_index)
+    name = models.CharField(max_length=250)
+    description = models.TextField()
+    resource = models.FileField(upload_to="resources")
+    visible = models.BooleanField(default=True)
+    category = models.ForeignKey(ResourceCategory)
+
+    class Meta:
+        ordering = ['index']
+
+    def __unicode__(self):
+        return self.name
+
+    @property
+    def short_description(self):
+        return self.description[:250]
