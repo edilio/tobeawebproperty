@@ -10,3 +10,4 @@ importlib==1.0.3
 django-mail-queue==2.1.2
 Fabric==1.10.0
 django-robots==1.0
+Pillow==2.6.1
