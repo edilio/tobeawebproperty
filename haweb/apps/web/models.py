@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models.loading import get_model
 
+from .states import STATE_CHOICES
+
 
 def next_index(model_name, app='web'):
     model = get_model(app, model_name)
@@ -108,3 +110,22 @@ class ResourceForm(models.Model):
     @property
     def short_description(self):
         return self.description[:250]
+
+
+class Organization(models.Model):
+    name = models.CharField(max_length=150)
+    address = models.CharField(max_length=150)
+    city = models.CharField(max_length=50)
+    state = models.CharField(max_length=2, choices=STATE_CHOICES)
+    zip = models.CharField(max_length=11)
+    Logo = models.FileField()
+    home_page = models.TextField()
+    five_year_plan = models.FileField(null=True, blank=True)
+    selected_theme = models.CharField(max_length=100, default='default')
+
+    @property
+    def city_state_zip(self):
+        return '{0}, {1} {2}'.format(self.city, self.state, self.zip)
+
+    def __unicode__(self):
+        return self.name

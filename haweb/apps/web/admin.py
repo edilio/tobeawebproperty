@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import FAQ, HelpfulLink, Career, ResourceCategory, ResourceForm
+from .models import FAQ, HelpfulLink, Career, ResourceCategory, ResourceForm, Organization
 
 
 @admin.register(FAQ)
@@ -25,7 +25,12 @@ class ResourceCategoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(ResourceForm)
-class ResourceCategoryFormAdmin(admin.ModelAdmin):
+class ResourceFormAdmin(admin.ModelAdmin):
     list_display = ('index', 'name', 'short_description', 'visible', 'category')
     list_filter = ('visible', 'category')
     search_fields = ('name', 'description')
+
+
+@admin.register(Organization)
+class OrganizationAdmin(admin.ModelAdmin):
+    list_display = ('name', 'address', 'city_state_zip', 'selected_theme')
