@@ -6,7 +6,10 @@ def gen_menu(parents, sub_menu=False):
     result = ""
     for parent in parents:
         if parent.how_many_children == 0:
-            result += '<li class="menu-item "><a href="{}">{}</a></li>\n'.format(parent.link, parent.name)
+            if parent.is_divider:
+                result += '<li class="divider"></li>'
+            else:
+                result += '<li class="menu-item "><a href="{}">{}</a></li>\n'.format(parent.link, parent.name)
         else:
             if sub_menu:
                 result += '<li class="menu-item dropdown dropdown-submenu">\n'
