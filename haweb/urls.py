@@ -6,7 +6,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    # url(r'^$', 'haweb.views.home', name='home'),
+    url(r'^$', 'haweb.apps.web.views.home', name='home'),
     # url(r'^haweb/', include('haweb.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

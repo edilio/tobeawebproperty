@@ -129,3 +129,25 @@ class Organization(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class Menu(models.Model):
+    index = models.PositiveSmallIntegerField(default=1)
+    name = models.CharField(max_length=50)
+    link = models.CharField(default="#", max_length=250)
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='children')
+
+    @property
+    def is_divider(self):
+        return self.name.lower() == 'divider'
+
+    @property
+    def how_many_children(self):
+        return self.children.count()
+
+    @property
+    def children_orderby_index(self):
+        return self.children.all().order_by('index')
+
+    def __unicode__(self):
+        return self.name

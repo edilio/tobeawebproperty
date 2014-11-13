@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import FAQ, HelpfulLink, Career, ResourceCategory, ResourceForm, Organization
+from .models import FAQ, HelpfulLink, Career, ResourceCategory, ResourceForm, Organization, Menu
 
 
 @admin.register(FAQ)
@@ -34,3 +34,9 @@ class ResourceFormAdmin(admin.ModelAdmin):
 @admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
     list_display = ('name', 'address', 'city_state_zip', 'selected_theme')
+
+
+@admin.register(Menu)
+class MenuAdmin(admin.ModelAdmin):
+    list_display = ('index', 'name', 'link', 'parent', 'how_many_children')
+    list_display_links = ('index', 'name', )
