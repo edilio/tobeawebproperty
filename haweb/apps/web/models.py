@@ -118,7 +118,7 @@ class Organization(models.Model):
     city = models.CharField(max_length=50)
     state = models.CharField(max_length=2, choices=STATE_CHOICES)
     zip = models.CharField(max_length=11)
-    Logo = models.FileField()
+    logo = models.FileField()
     home_page = models.TextField()
     five_year_plan = models.FileField(null=True, blank=True)
     selected_theme = models.CharField(max_length=100, default='default')

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Menu
+from .models import Menu, Organization
 
 
 def gen_menu(parents, sub_menu=False):
@@ -26,4 +26,6 @@ def gen_menu(parents, sub_menu=False):
 def home(request):
     menu_parents = Menu.objects.filter(parent__isnull=True).order_by('index')
     menu = gen_menu(menu_parents)
-    return render(request, 'home.html', {'menu_parents': menu_parents, 'menu': menu})
+    organization = Organization.objects.all()[0]
+    context = {'menu_parents': menu_parents, 'menu': menu, 'organization': organization}
+    return render(request, 'home.html', context)

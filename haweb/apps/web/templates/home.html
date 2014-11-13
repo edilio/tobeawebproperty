@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+{% load staticfiles %}
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Bootstrap 3, from LayoutIt!</title>
+  <title>{{ organization.name }}'s web site</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
   <meta name="author" content="">
@@ -62,7 +63,11 @@
 <div class="container">
 	<div class="row clearfix">
         <div class="col-md-2 column">
-			<img alt="140x140" src="http://lorempixel.com/140/140/" class="img-rounded">
+            {% if organization.logo %}
+			    <img alt="140x140" src="{{ organization.logo.url }}" class="img-rounded">
+            {%  else %}
+                <img alt="add a logo of 140x140 to your organization" src="http://lorempixel.com/140/140/" class="img-rounded">
+            {% endif %}
 		</div>
 		<div class="col-md-10 column">
             <div class="navbar navbar-default" role="navigation">
@@ -178,47 +183,19 @@
 						<div class="media-body">
 							<h4 class="media-heading">
 								Nested media heading
-							</h4> Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
-							<div class="media">
-								 <a href="#" class="pull-left"><img src="http://lorempixel.com/64/64/" class="media-object" alt=""></a>
-								<div class="media-body">
-									<h4 class="media-heading">
-										Nested media heading
-									</h4> Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
-								</div>
-							</div>
+							</h4>
+                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
+
 						</div>
 					</div>
+					
 					<div class="media">
 						 <a href="#" class="pull-left"><img src="http://lorempixel.com/64/64/" class="media-object" alt=""></a>
 						<div class="media-body">
 							<h4 class="media-heading">
 								Nested media heading
 							</h4> Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
-							<div class="media">
-								 <a href="#" class="pull-left"><img src="http://lorempixel.com/64/64/" class="media-object" alt=""></a>
-								<div class="media-body">
-									<h4 class="media-heading">
-										Nested media heading
-									</h4> Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="media">
-						 <a href="#" class="pull-left"><img src="http://lorempixel.com/64/64/" class="media-object" alt=""></a>
-						<div class="media-body">
-							<h4 class="media-heading">
-								Nested media heading
-							</h4> Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
-							<div class="media">
-								 <a href="#" class="pull-left"><img src="http://lorempixel.com/64/64/" class="media-object" alt=""></a>
-								<div class="media-body">
-									<h4 class="media-heading">
-										Nested media heading
-									</h4> Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
-								</div>
-							</div>
+
 						</div>
 					</div>
 				</div>
