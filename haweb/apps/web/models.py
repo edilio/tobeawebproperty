@@ -143,7 +143,8 @@ class Organization(models.Model):
 
     @property
     def carousel_info(self):
-        return self.carousel.all()
+        result = self.carousel.all()
+        return enumerate(result)
 
     def __unicode__(self):
         return self.name

@@ -49,6 +49,7 @@ class ContentListView(ListView):
         context = super(ContentListView, self).get_context_data(**kwargs)
         context['now'] = timezone.now()
         context['menu'] = gen_menu()
+        context['organization'] = Organization.objects.all()[0]
         return context
 
 
@@ -62,4 +63,5 @@ class ContentDetail(DetailView):
         context = super(ContentDetail, self).get_context_data(**kwargs)
         context['now'] = timezone.now()
         context['menu'] = gen_menu()
+        context['organization'] = Organization.objects.all()[0]
         return context

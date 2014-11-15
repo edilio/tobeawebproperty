@@ -73,18 +73,9 @@ USE_L10N = True
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
-# Absolute filesystem path to the directory that will hold user-uploaded files.
-# Example: "/var/www/example.com/media/"
-IN_DEV = int(os.environ.get('IN_DEV', '0'))
-if IN_DEV:
-    MEDIA_ROOT = '/Users/edilio/projects/tobeawebproperty/haweb/apps/web/media'
-else:
-    MEDIA_ROOT = '/var/django/static'
 
-# URL that handles the media served from MEDIA_ROOT. Make sure to use a
-# trailing slash.
-# Examples: "http://example.com/media/", "http://media.example.com/"
-MEDIA_URL = ''
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = '/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -173,7 +164,6 @@ OWN_APPS = (
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + OWN_APPS
-print INSTALLED_APPS
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -235,8 +225,8 @@ SWAGGER_SETTINGS = {
                           'delete'
     ],
     "api_key": '',  # An API key
-    "is_authenticated": True,  # Set to True to enforce user authentication,
-    "is_superuser": True,  # Set to True to enforce admin only access
+    "is_authenticated": False,  # Set to True to enforce user authentication,
+    "is_superuser": False,  # Set to True to enforce admin only access
 }
 
 if not DEBUG:
