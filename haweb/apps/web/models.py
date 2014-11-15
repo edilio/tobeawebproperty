@@ -24,8 +24,9 @@ def next_faq_index():
 
 class FAQ(models.Model):
     index = models.PositiveIntegerField(default=next_faq_index)
-    question = models.CharField(max_length=250)
+    question = models.CharField(max_length=250, unique=True)
     answer = models.TextField()
+    slug = models.SlugField(editable=False, max_length=280, default='')
 
     class Meta:
         ordering = ['index']
@@ -36,6 +37,16 @@ class FAQ(models.Model):
     @property
     def short_answer(self):
         return self.answer[:250]
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('faq', (), {
+            'slug': slugify(self.question)
+        })
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.question)
+        super(FAQ, self).save(*args, **kwargs)
 
 
 def next_helpful_link_index():

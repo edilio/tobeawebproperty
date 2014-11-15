@@ -3,7 +3,7 @@ from django.views.generic import DetailView
 from django.views.generic.list import ListView
 from django.utils import timezone
 
-from .models import Menu, Organization, Content
+from ..models import Menu, Organization, Content
 
 
 def gen_menu(parents=None, sub_menu=False):

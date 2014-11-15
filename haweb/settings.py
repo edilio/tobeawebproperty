@@ -143,8 +143,8 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'haweb/apps/web/templates'),
 )
 
-INSTALLED_APPS = (
-    'django.contrib.auth',
+DJANGO_APPS = (
+     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
@@ -154,10 +154,26 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'django.contrib.humanize',
+    'django.contrib.sitemaps',
 
+)
+
+THIRD_PARTY_APPS = (
+    'rest_framework',
+    'robots',
+    # 'debug_toolbar',
+    'rest_framework_swagger',
+
+)
+
+OWN_APPS = (
     'haweb.apps.core',
     'haweb.apps.web',
 )
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + OWN_APPS
+print INSTALLED_APPS
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -189,3 +205,43 @@ LOGGING = {
 }
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.JSONPRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    )
+}
+
+API_SETTINGS = {
+    'DEFAULT_LIST_LIMIT': 30
+}
+
+SWAGGER_SETTINGS = {
+    "exclude_namespaces": [],  # List URL namespaces to ignore
+    "api_version": '0.1',  # Specify your API's version
+    "api_path": "/",  # Specify the path to your API not a root level
+    "enabled_methods": [  # Specify which methods to enable in Swagger UI
+                          'get',
+                          'post',
+                          'put',
+                          'patch',
+                          'delete'
+    ],
+    "api_key": '',  # An API key
+    "is_authenticated": True,  # Set to True to enforce user authentication,
+    "is_superuser": True,  # Set to True to enforce admin only access
+}
+
+if not DEBUG:
+    ROBOTS_CACHE_TIMEOUT = 60*60*24
+
+ROBOTS_SITEMAP_URLS = [
+    'http://demo.beawebpropertycom/sitemap.xml',
+]
