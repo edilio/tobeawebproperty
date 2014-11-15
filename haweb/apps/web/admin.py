@@ -1,4 +1,7 @@
 from django.contrib import admin
+from django import forms
+from django.db import models
+
 from .models import (FAQ,
                      HelpfulLink,
                      Career,
@@ -68,5 +71,13 @@ class ContentAdmin(admin.ModelAdmin):
             print type(E)
             obj.created_by = request.user
         obj.save()
+
+    # formfield_overrides = {models.TextField: {'widget': forms.Textarea(attrs={'class': 'ckeditor'})}, }
+
+    class Media:
+        js = (
+            'js/vendor/tinymce/tinymce.min.js',
+            'js/vendor/tinymce/textareas.js',
+        )
 
 
