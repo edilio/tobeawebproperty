@@ -75,7 +75,11 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT = ''
+IN_DEV = int(os.environ.get('IN_DEV', '0'))
+if IN_DEV:
+    MEDIA_ROOT = '/Users/edilio/projects/tobeawebproperty/haweb/apps/web/media'
+else:
+    MEDIA_ROOT = '/var/django/static'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.

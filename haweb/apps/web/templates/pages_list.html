@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{%  block display_content %}
+    <h1>Web site pages</h1>
+    <ul>
+    {% for content in object_list %}
+        <li>
+            <a href="{% url 'content' content.slug %}">
+                {{ content.title | capfirst }}
+            </a>
+        </li>
+    {% empty %}
+        <li>No pages yet.</li>
+    {% endfor %}
+    </ul>
+{% endblock %}

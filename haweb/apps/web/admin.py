@@ -1,5 +1,13 @@
 from django.contrib import admin
-from .models import FAQ, HelpfulLink, Career, ResourceCategory, ResourceForm, Organization, Menu
+from .models import (FAQ,
+                     HelpfulLink,
+                     Career,
+                     ResourceCategory,
+                     ResourceForm,
+                     Organization,
+                     Menu,
+                     CarouselInfo,
+                     Content)
 
 
 @admin.register(FAQ)
@@ -31,12 +39,34 @@ class ResourceFormAdmin(admin.ModelAdmin):
     search_fields = ('name', 'description')
 
 
+class CarouselInfoInline(admin.StackedInline):
+    model = CarouselInfo
+    extra = 3
+
+
 @admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
     list_display = ('name', 'address', 'city_state_zip', 'selected_theme')
 
+    inlines = [CarouselInfoInline]
 
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
     list_display = ('index', 'name', 'link', 'parent', 'how_many_children')
     list_display_links = ('index', 'name', )
+
+
+@admin.register(Content)
+class ContentAdmin(admin.ModelAdmin):
+    list_display = ('title', 'slug', 'created_by', 'created_on', 'modified_by', 'modified_on')
+
+    def save_model(self, request, obj, form, change):
+        try:
+            u = obj.created_by
+            obj.modified_by = request.user
+        except Exception as E:
+            print type(E)
+            obj.created_by = request.user
+        obj.save()
+
+

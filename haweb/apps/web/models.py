@@ -1,5 +1,8 @@
 from django.db import models
 from django.db.models.loading import get_model
+from django.utils import timezone
+from django.template.defaultfilters import slugify
+from django.conf import settings
 
 from .states import STATE_CHOICES
 
@@ -118,7 +121,7 @@ class Organization(models.Model):
     city = models.CharField(max_length=50)
     state = models.CharField(max_length=2, choices=STATE_CHOICES)
     zip = models.CharField(max_length=11)
-    logo = models.FileField()
+    logo = models.ImageField(upload_to="logos")
     home_page = models.TextField()
     five_year_plan = models.FileField(null=True, blank=True)
     selected_theme = models.CharField(max_length=100, default='default')
@@ -126,6 +129,10 @@ class Organization(models.Model):
     @property
     def city_state_zip(self):
         return '{0}, {1} {2}'.format(self.city, self.state, self.zip)
+
+    @property
+    def carousel_info(self):
+        return self.carousel.all()
 
     def __unicode__(self):
         return self.name
@@ -151,3 +158,46 @@ class Menu(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class CarouselInfo(models.Model):
+    picture = models.ImageField(upload_to="photos")
+    title = models.CharField(max_length=150)
+    description = models.CharField(max_length=250)
+    organization = models.ForeignKey(Organization, related_name="carousel")
+
+    def __unicode__(self):
+        return self.title
+
+
+class Content(models.Model):
+    title = models.CharField(max_length=250)
+    content = models.TextField()
+    slug = models.SlugField(editable=False, max_length=280)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, editable=False, related_name="created_content")
+    created_on = models.DateTimeField(default=timezone.now, blank=True, editable=False)
+    modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, editable=False, related_name="modified_content", null=True)
+    modified_on = models.DateTimeField(null=True, blank=True, editable=False)
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('content', (), {
+            'slug': self.slug
+        })
+
+    def gen_slug(self):
+        base = '{0}-{1}'.format(self.id, self.title)
+        return slugify(base)
+
+    def save(self, *args, **kwargs):
+        first_time = self.id is None
+        self.slug = self.gen_slug()
+        if self.modified_by:
+            self.modified_on = timezone.now()
+
+        super(Content, self).save(*args, **kwargs)
+        if first_time:
+            self.save(*args, **kwargs)
+
+    def __unicode__(self):
+        return self.title
