@@ -10,7 +10,8 @@ from .models import (FAQ,
                      Organization,
                      Menu,
                      CarouselInfo,
-                     Content)
+                     Content,
+                     WorkOrder)
 
 
 @admin.register(FAQ)
@@ -80,4 +81,6 @@ class ContentAdmin(admin.ModelAdmin):
             'js/vendor/tinymce/textareas.js',
         )
 
-
+@admin.register(WorkOrder)
+class WorkOrderAdmin(admin.ModelAdmin):
+    list_display = ('work_order_no', 'priority', 'scheduled', )

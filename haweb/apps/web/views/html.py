@@ -3,7 +3,7 @@ from django.views.generic import DetailView
 from django.views.generic.list import ListView
 from django.utils import timezone
 
-from ..models import Menu, Organization, Content
+from ..models import Menu, Organization, Content, FAQ, HelpfulLink, Career
 
 
 def gen_menu(parents=None, sub_menu=False):
@@ -33,24 +33,44 @@ def gen_menu(parents=None, sub_menu=False):
     return result
 
 
+def gen_breadcrumb(path):
+    lst = path.split('/')
+    result = ['<li><a href="/">Home</a> <span class="divider"></span></li>']
+    link = ''
+    for m in lst[1:-1]:
+        link += '/' + m
+        result.append('<li><a href="{}">{}</a> <span class="divider"></span></li>'.format(link, m))
+    if len(lst) > 1:
+        result.append('<li class="active">{}</li>'.format(lst[-1]))
+
+    return "".join(result)
+
+
+def gen_common_context(path):
+    return {
+        'now': timezone.now(),
+        'menu': gen_menu(),
+        'organization': Organization.objects.all()[0],
+        'breadcrumb': gen_breadcrumb(path)
+    }
+
+
 def home(request):
-    menu = gen_menu()
-    organization = Organization.objects.all()[0]
-    context = {'menu': menu, 'organization': organization}
-    return render(request, 'home.html', context)
+    return render(request, 'home.html', gen_common_context(request.path_info))
 
 
-class ContentListView(ListView):
-
-    model = Content
-    template_name = 'pages_list.html'
+class HAWebListView(ListView):
 
     def get_context_data(self, **kwargs):
-        context = super(ContentListView, self).get_context_data(**kwargs)
-        context['now'] = timezone.now()
-        context['menu'] = gen_menu()
-        context['organization'] = Organization.objects.all()[0]
+        context = super(HAWebListView, self).get_context_data(**kwargs)
+        context.update(gen_common_context(self.request.path_info))
+
         return context
+
+
+class ContentListView(HAWebListView):
+    model = Content
+    template_name = 'pages_list.html'
 
 
 class ContentDetail(DetailView):
@@ -61,7 +81,10 @@ class ContentDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ContentDetail, self).get_context_data(**kwargs)
-        context['now'] = timezone.now()
-        context['menu'] = gen_menu()
-        context['organization'] = Organization.objects.all()[0]
+        context.update(gen_common_context(self.request.path_info))
         return context
+
+
+class FAQListView(HAWebListView):
+    model = FAQ
+    template_name = 'faqs.html'

@@ -213,3 +213,19 @@ class Content(models.Model):
 
     def __unicode__(self):
         return self.title
+
+
+PRIORITY_CHOICES = (
+    (1, 'High'),
+    (2, 'Medium'),
+    (3, 'Low'),
+)
+
+
+class WorkOrder(models.Model):
+    work_order_no = models.CharField(max_length=12)
+    priority = models.PositiveSmallIntegerField(choices=PRIORITY_CHOICES)
+    scheduled = models.DateTimeField(default=timezone.now())
+
+    def __unicode__(self):
+        return self.work_order_no

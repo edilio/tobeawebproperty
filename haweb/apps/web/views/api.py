@@ -1,11 +1,12 @@
-from ..models import Career, ResourceForm, FAQ, HelpfulLink, Content
+from ..models import Career, ResourceForm, FAQ, HelpfulLink, Content, WorkOrder
 from ..serializers import (CareerSerializer,
                            ResourceFormSerializer,
                            FAQSerializer,
                            HelpfulLinkSerializer,
-                           ContentSerializer)
+                           ContentSerializer,
+                           WorkOrderSerializer)
 
-from haweb.libs.drf.api_views import JEDListRetrieve
+from haweb.libs.drf.api_views import JEDListRetrieve, JEDModelViewSet
 
 
 class CareerViewSet(JEDListRetrieve):
@@ -31,3 +32,8 @@ class HelpfulLinkViewSet(JEDListRetrieve):
 class ContentViewSet(JEDListRetrieve):
     model = Content
     serializer_class = ContentSerializer
+
+
+class WorkOrderViewSet(JEDModelViewSet):
+    model = WorkOrder
+    serializer_class = WorkOrderSerializer

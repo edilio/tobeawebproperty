@@ -28,7 +28,7 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': '',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': '',
@@ -39,10 +39,11 @@ DATABASES = {
 }
 
 
-DATABASES['default']['NAME'] = os.environ.get('NAME', 'concerns_db')
-DATABASES['default']['USER'] = os.environ.get('USER_NAME', 'root')
-DATABASES['default']['PASSWORD'] = os.environ.get('PASSWORD', 'whatever')
-DATABASES['default']['HOST'] = os.environ.get('HOST', 'localhost')
+DATABASES['default']['NAME'] = os.environ.get('NAME')
+if DATABASES['default']['ENGINE'].endswith('mysql'):
+    DATABASES['default']['USER'] = os.environ.get('USER_NAME', 'root')
+    DATABASES['default']['PASSWORD'] = os.environ.get('PASSWORD', 'whatever')
+    DATABASES['default']['HOST'] = os.environ.get('HOST', 'localhost')
 
 AUTH_USER_MODEL = 'core.UserProfile'
 
