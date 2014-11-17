@@ -3,7 +3,7 @@ from django.views.generic import DetailView
 from django.views.generic.list import ListView
 from django.utils import timezone
 
-from ..models import Menu, Organization, Content, FAQ, HelpfulLink, Career
+from ..models import Menu, Organization, Content, FAQ, HelpfulLink, Career, ResourceForm, ResourceCategory
 
 
 def gen_menu(parents=None, sub_menu=False):
@@ -110,3 +110,13 @@ class HelpfulLinkListView(HAWebListView):
 class CareerListView(HAWebListView):
     model = Career
     template_name = 'careers.html'
+
+
+class ResourceListView(HAWebListView):
+    model = ResourceForm
+    template_name = 'resources.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ResourceListView, self).get_context_data(**kwargs)
+        context.update({'categories': ResourceCategory.objects.all()})
+        return context

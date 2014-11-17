@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{%  block display_content %}
+    <h1>Resources</h1>
+    <ul>
+        {% for c in categories %}
+            <li>
+                <h2>{{ c.name }}</h2>
+                <ol>
+                    {% for r in object_list %}
+                        {% if r.visible and r.category == c %}
+                            <li>
+                                <div>
+                                    <a href="{{ r.resource.url }}">
+                                        {{ r.name | capfirst }}
+                                    </a>
+                                 </div>
+                                {{ r.description | safe }}
+
+                            </li>
+                        {% endif %}
+                    {% empty %}
+                        <li>No {{ c.name }}s yet.</li>
+                    {% endfor %}
+                </ol>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
