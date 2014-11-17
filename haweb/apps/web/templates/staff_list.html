@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{%  block display_content %}
+    <h1>Our Staff</h1>
+    <ul>
+    {% for u in object_list %}
+        <li>
+            <h4>{{ u.order_on }}</h4>
+            {{ u.title }}   <br />
+            Email: {{ u.email }}<br />
+            Phone: {{ u.phone }}
+        </li>
+    {% empty %}
+        <li>No Personnel yet.</li>
+    {% endfor %}
+    </ul>
+{% endblock %}

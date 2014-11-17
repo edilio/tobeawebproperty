@@ -12,6 +12,7 @@ class UserProfile(AbstractUser):
         self.edit_date = timezone.now()
         super(UserProfile, self).save(*args, **kwargs)
 
-
-
+    @property
+    def order_on(self):
+        return self.last_name + ', ' + self.first_name
 

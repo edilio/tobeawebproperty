@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django import forms
 from django.db import models
+from django.db.models.loading import get_model
 
 from .models import (FAQ,
                      HelpfulLink,
@@ -89,3 +90,11 @@ class ContentAdmin(TinymceAdmin):
 # @admin.register(WorkOrder)
 # class WorkOrderAdmin(admin.ModelAdmin):
 #     list_display = ('work_order_no', 'priority', 'scheduled', )
+
+def insert_default_user_groups():
+    Group = get_model('auth', 'Group')
+    if not Group.objects.exists():
+        Group.objects.create(name='Displayable Users')
+        Group.objects.create(name='Commissioners')
+
+insert_default_user_groups()

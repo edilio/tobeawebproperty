@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-from django.template.defaultfilters import slugify
 
 
 def insert_career(apps, schema_editor):

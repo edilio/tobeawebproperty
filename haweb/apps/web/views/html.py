@@ -2,8 +2,10 @@ from django.shortcuts import render
 from django.views.generic import DetailView
 from django.views.generic.list import ListView
 from django.utils import timezone
+from django.contrib.auth.models import Group
 
 from ..models import Menu, Organization, Content, FAQ, HelpfulLink, Career, ResourceForm, ResourceCategory
+from haweb.apps.core.models import UserProfile
 
 
 def gen_menu(parents=None, sub_menu=False):
@@ -119,4 +121,15 @@ class ResourceListView(HAWebListView):
     def get_context_data(self, **kwargs):
         context = super(ResourceListView, self).get_context_data(**kwargs)
         context.update({'categories': ResourceCategory.objects.all()})
+        return context
+
+
+class StaffListView(HAWebListView):
+    model = UserProfile
+    template_name = 'staff_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(StaffListView, self).get_context_data(**kwargs)
+        g = Group.objects.filter(name='Displayable Users')[0]
+        context['object_list'] = g.user_set.all()
         return context
