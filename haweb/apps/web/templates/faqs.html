@@ -5,8 +5,8 @@
     <ol>
     {% for q in object_list %}
         <li>
-            <div class="red">{{ q.question | capfirst }}</div>
-            {{ q.answer }}
+            <div class="blue">{{ q.question | capfirst }}</div>
+            {{ q.answer | safe }}
 
         </li>
     {% empty %}

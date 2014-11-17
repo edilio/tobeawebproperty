@@ -55,8 +55,20 @@ def gen_common_context(path):
     }
 
 
+def common_render(request, template):
+    return render(request, template, gen_common_context(request.path_info))
+
+
 def home(request):
-    return render(request, 'home.html', gen_common_context(request.path_info))
+    return common_render(request, 'home.html')
+
+
+def about_us(request):
+    return common_render(request, 'about_us.html')
+
+
+def contact_us(request):
+    return common_render(request, 'contact_us.html')
 
 
 class HAWebListView(ListView):
@@ -88,3 +100,13 @@ class ContentDetail(DetailView):
 class FAQListView(HAWebListView):
     model = FAQ
     template_name = 'faqs.html'
+
+
+class HelpfulLinkListView(HAWebListView):
+    model = HelpfulLink
+    template_name = 'helpful_links.html'
+
+
+class CareerListView(HAWebListView):
+    model = Career
+    template_name = 'careers.html'

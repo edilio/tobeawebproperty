@@ -12,10 +12,13 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', html.home, name='home'),
+    url(r'^about-us$', html.about_us, name='about_us'),
+    url(r'^contact-us$', html.contact_us, name='contact_us'),
     url(r'^pages/$', html.ContentListView.as_view(), name='content_list'),
     url(r'^pages/(?P<slug>[-\w\d]+)/$', html.ContentDetail.as_view(), name='content'),
     url(r'^faqs/$', html.FAQListView.as_view(), name='faq_list'),
-
+    url(r'^helpful-links/$', html.HelpfulLinkListView.as_view(), name='helpful_link_list'),
+    url(r'^careers/$', html.CareerListView.as_view(), name='career_list'),
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

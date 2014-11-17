@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{%  block display_content %}
+    <h1>Careers</h1>
+    <ol>
+    {% for career in object_list %}
+        <li>
+            <div class="blue"><strong>{{ career.title }}</strong></div>
+            <div>{{ career.description | safe }}</div>
+
+        </li>
+    {% empty %}
+        <li>No Careers yet.</li>
+    {% endfor %}
+    </ol>
+{% endblock %}

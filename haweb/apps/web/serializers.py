@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from . models import Career, ResourceForm, FAQ, HelpfulLink, Content, WorkOrder
+from . models import Career, ResourceForm, FAQ, HelpfulLink, Content
+#, WorkOrder
 
 
 class CareerSerializer(serializers.ModelSerializer):
@@ -27,6 +28,6 @@ class ContentSerializer(serializers.ModelSerializer):
         model = Content
 
 
-class WorkOrderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = WorkOrder
+# class WorkOrderSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = WorkOrder

@@ -100,7 +100,7 @@ class ResourceCategory(models.Model):
         verbose_name = "category"
 
     def __unicode__(self):
-        return self.title
+        return self.name
 
 
 def next_resource_index():
@@ -134,6 +134,8 @@ class Organization(models.Model):
     zip = models.CharField(max_length=11)
     logo = models.ImageField(upload_to="logos")
     home_page = models.TextField()
+    about_us_page = models.TextField(default="")
+    contact_us_page = models.TextField(default="")
     five_year_plan = models.FileField(null=True, blank=True)
     selected_theme = models.CharField(max_length=100, default='default')
 
@@ -215,17 +217,17 @@ class Content(models.Model):
         return self.title
 
 
-PRIORITY_CHOICES = (
-    (1, 'High'),
-    (2, 'Medium'),
-    (3, 'Low'),
-)
-
-
-class WorkOrder(models.Model):
-    work_order_no = models.CharField(max_length=12)
-    priority = models.PositiveSmallIntegerField(choices=PRIORITY_CHOICES)
-    scheduled = models.DateTimeField(default=timezone.now())
-
-    def __unicode__(self):
-        return self.work_order_no
+# PRIORITY_CHOICES = (
+#     (1, 'High'),
+#     (2, 'Medium'),
+#     (3, 'Low'),
+# )
+#
+#
+# class WorkOrder(models.Model):
+#     work_order_no = models.CharField(max_length=12)
+#     priority = models.PositiveSmallIntegerField(choices=PRIORITY_CHOICES)
+#     scheduled = models.DateTimeField(default=timezone.now())
+#
+#     def __unicode__(self):
+#         return self.work_order_no

@@ -9,7 +9,7 @@ router.register(r'resource-forms', views.ResourceFormViewSet)
 router.register(r'faqs', views.FAQViewSet)
 router.register(r'helpful-links', views.HelpfulLinkViewSet)
 router.register(r'contents', views.ContentViewSet)
-router.register(r'work-orders', views.WorkOrderViewSet)
+# router.register(r'work-orders', views.WorkOrderViewSet)
 
 urlpatterns = patterns('haweb.apps.web',
     # Examples:

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{%  block display_content %}
+    <h1>Helpful Links</h1>
+    <ol>
+    {% for link in object_list %}
+        <li>
+            <a href="{{ link.url }}">
+                <div>{{ link.title }}</div>
+            </a>
+            <div>{{ link.description }}</div>
+
+        </li>
+    {% empty %}
+        <li>No links yet.</li>
+    {% endfor %}
+    </ol>
+{% endblock %}
+
