@@ -20,7 +20,12 @@
 <div class="container">
 	<div class="row clearfix">
         <div class="col-md-2 column">
-			<img alt="140x140" src="{{ organization.logo.url }}" class="img-rounded">
+            {% if in_dev %}
+			    <img alt="140x140" src="{{ organization.logo.url }}" class="img-rounded">
+            {% else %}
+                <img alt="140x140" width="140" height="140" src="http://src.sencha.io/140/{{ host }}{{ organization.logo.url }}"
+                     class="img-rounded">
+            {%  endif %}
 		</div>
 		<div class="col-md-10 column">
             <h2>Welcome to {{ organization.name }}</h2>
@@ -78,7 +83,12 @@
                         {% else %}
                             <div class="item">
                         {%  endif %}
-                            <img alt="" src="{{ info.picture.url }}">
+                            {% if in_dev %}
+                                <img alt="800x300" src="{{ info.picture.url }}" class="img-rounded">
+                            {% else %}
+                                <img alt="picture" src="http://src.sencha.io/800/300/{{ host }}{{ info.picture.url }}">
+                            {% endif %}
+
                             <div class="carousel-caption">
                                 <h4>{{ info.title }}</h4>
                                 <p>{{ info.description }}</p>
@@ -119,9 +129,9 @@
 {#			    <li>#}
 {#                    <a href="{% url 'commissioner_list' %}">Commissioners</a>#}
 {#				</li>#}
-{#                <li>#}
-{#                    <a href="{% url 'staff_list' %}">Staff</a>#}
-{#				</li>#}
+                <li>
+                    <a href="{% url 'staff_list' %}">Staff</a>
+				</li>
                 <li>
                     <a href="{% url 'faq_list' %}">FAQs</a>
 				</li>

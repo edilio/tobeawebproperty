@@ -18,6 +18,7 @@ dotenv.read_dotenv(env_file)
 
 DEBUG = bool(int(os.environ.get('DEBUG', '0')))
 TEMPLATE_DEBUG = DEBUG
+IN_DEV = bool(int(os.environ.get('IN_DEV', '0')))
 
 
 ADMINS = (

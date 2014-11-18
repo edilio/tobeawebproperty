@@ -3,6 +3,7 @@ from django.views.generic import DetailView
 from django.views.generic.list import ListView
 from django.utils import timezone
 from django.contrib.auth.models import Group
+from django.conf import settings
 
 from ..models import Menu, Organization, Content, FAQ, HelpfulLink, Career, ResourceForm, ResourceCategory
 from haweb.apps.core.models import UserProfile
@@ -48,17 +49,19 @@ def gen_breadcrumb(path):
     return "".join(result)
 
 
-def gen_common_context(path):
+def gen_common_context(request):
     return {
         'now': timezone.now(),
         'menu': gen_menu(),
         'organization': Organization.objects.all()[0],
-        'breadcrumb': gen_breadcrumb(path)
+        'breadcrumb': gen_breadcrumb(request.path_info),
+        'in_dev': settings.IN_DEV,
+        'host': "{}://{}".format(request.scheme, request.get_host())
     }
 
 
 def common_render(request, template):
-    return render(request, template, gen_common_context(request.path_info))
+    return render(request, template, gen_common_context(request))
 
 
 def home(request):
