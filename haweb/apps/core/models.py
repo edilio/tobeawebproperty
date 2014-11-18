@@ -7,6 +7,7 @@ class UserProfile(AbstractUser):
     photo = models.ImageField(upload_to='users', blank=True, null=True)
     title = models.CharField(max_length=250)
     edit_date = models.DateTimeField(default=timezone.now)
+    phone = models.CharField(max_length=15, default="")
 
     def save(self, *args, **kwargs):
         self.edit_date = timezone.now()

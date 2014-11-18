@@ -80,7 +80,7 @@ class HAWebListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(HAWebListView, self).get_context_data(**kwargs)
-        context.update(gen_common_context(self.request.path_info))
+        context.update(gen_common_context(self.request))
 
         return context
 
@@ -98,7 +98,7 @@ class ContentDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ContentDetail, self).get_context_data(**kwargs)
-        context.update(gen_common_context(self.request.path_info))
+        context.update(gen_common_context(self.request))
         return context
 
 
@@ -134,5 +134,16 @@ class StaffListView(HAWebListView):
     def get_context_data(self, **kwargs):
         context = super(StaffListView, self).get_context_data(**kwargs)
         g = Group.objects.filter(name='Displayable Users')[0]
+        context['object_list'] = g.user_set.all()
+        return context
+
+
+class CommissionerListView(HAWebListView):
+    model = UserProfile
+    template_name = 'commissioner_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(CommissionerListView, self).get_context_data(**kwargs)
+        g = Group.objects.filter(name='Commissioners')[0]
         context['object_list'] = g.user_set.all()
         return context

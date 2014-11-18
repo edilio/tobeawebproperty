@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{%  block display_content %}
+    <h1>Commissioner</h1>
+    {% for u in object_list %}
+        <div class="container">
+            <div class="row clearfix">
+                <div class="col-md-10 column">
+                    <h4>{{ u.order_on }}</h4>
+                    {{ u.title }}   <br />
+                    Email: {{ u.email }}<br />
+                    Phone: {{ u.phone }}
+                </div>
+                <div class="col-md-2 column">
+                    {% if u.photo %}
+                        {% if in_dev %}
+                            <img alt="140x140" src="{{ u.photo.url }}" class="img-rounded">
+                        {% else %}
+                            <img alt="140x140" width="140" height="140" src="http://src.sencha.io/140/{{ host }}{{ u.photo.url }}"
+                                 class="img-rounded">
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    {% empty %}
+        <ul>
+            <li>No Commissioners yet.</li>
+        </ul>
+    {% endfor %}
+
+{% endblock %}
