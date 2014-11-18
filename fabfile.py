@@ -15,5 +15,5 @@ def deploy():
         sudo('git pull')
         run('workon haweb && ./manage.py collectstatic --noinput')
         run('workon haweb && ./manage.py migrate')
-        run('workon haweb && gunicorn -w 2 -p 8000 -n haweb haweb.wsgi:application')
+        run('workon haweb && gunicorn -w 2 -p 8000 -n haweb haweb.wsgi:application &')
         # sudo('/etc/init.d/supervisor restart')

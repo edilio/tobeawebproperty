@@ -140,6 +140,17 @@
 		</div>
 		<div class="col-md-4 column">
 			<h2>
+				Miscellaneous
+			</h2>
+			<ul>
+                <li><a href="{% url 'resource_list' %}">Resources</a></li>
+                <li><a href="{% url 'helpful_link_list' %}">Helpful Links</a></li>
+                <li><a href="{% url 'career_list' %}">Careers</a></li>
+            </ul>
+
+		</div>
+		<div class="col-md-4 column">
+			<h2>
 				Contact Us
 			</h2>
 			<p>
@@ -148,17 +159,6 @@
             <h4>Our Address</h4>
             {{ organization.address }} <br/>
             {{ organization.city_state_zip }}
-		</div>
-		<div class="col-md-4 column">
-			<h2>
-				Heading
-			</h2>
-			<p>
-				Donec id elit non mi porta gravida .
-			</p>
-			<p>
-				<a class="btn" href="#">View details »</a>
-			</p>
 		</div>
 	</div>
 </div>
