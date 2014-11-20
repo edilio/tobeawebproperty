@@ -138,6 +138,8 @@ class Organization(models.Model):
     contact_us_page = models.TextField(default="")
     five_year_plan = models.FileField(null=True, blank=True)
     selected_theme = models.CharField(max_length=100, default='default')
+    lat = models.FloatField(default=25.8649876)
+    lng = models.FloatField(default=-80.26423799999999)
 
     @property
     def city_state_zip(self):
