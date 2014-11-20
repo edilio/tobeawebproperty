@@ -76,6 +76,10 @@ def contact_us(request):
     return common_render(request, 'contact_us.html')
 
 
+def get_directions(request):
+    return common_render(request, 'directions.html')
+
+
 class HAWebListView(ListView):
 
     def get_context_data(self, **kwargs):

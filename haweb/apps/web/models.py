@@ -4,6 +4,8 @@ from django.utils import timezone
 from django.template.defaultfilters import slugify
 from django.conf import settings
 
+from pygeocoder import Geocoder
+
 from .states import STATE_CHOICES
 
 
@@ -152,6 +154,13 @@ class Organization(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if (self.lat == 25.8649876) and (self.lng == -80.264238):
+            full_address = "{0} {1}".format(self.address, self.city_state_zip)
+            results = Geocoder.geocode(full_address)
+            self.lat, self.lng = results[0].coordinates
+        super(Organization, self).save(*args, **kwargs)
 
 
 class Menu(models.Model):

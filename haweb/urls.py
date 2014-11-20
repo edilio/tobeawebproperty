@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     url(r'^resources/$', html.ResourceListView.as_view(), name='resource_list'),
     url(r'^staff/$', html.StaffListView.as_view(), name='staff_list'),
     url(r'^commisioners/$', html.CommissionerListView.as_view(), name='commissioner_list'),
+    url(r'^get-directions$', html.get_directions, name='get_directions'),
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
