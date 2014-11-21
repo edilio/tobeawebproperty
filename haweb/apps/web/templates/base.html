@@ -12,27 +12,25 @@
 	<!--link rel="stylesheet/less" href="less/responsive.less" type="text/css" /-->
 	<!--script src="js/less-1.3.3.min.js"></script-->
 	<!--append ‘#!watch’ to the browser URL, then refresh the page. -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=0.002" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=0.0006" type="text/css">
 
 </head>
 
 <body>
 <div class="container">
 	<div class="row clearfix">
-        <div class="col-md-2 column">
-            {% if in_dev %}
-			    <img alt="140x140" src="{{ organization.logo.url }}" class="img-rounded">
-            {% else %}
-                <img alt="140x140" width="140" height="140" src="http://src.sencha.io/140/{{ host }}{{ organization.logo.url }}"
-                     class="img-rounded">
-            {%  endif %}
+        <div class="col-md-2 column" id="logo">
+            <img alt="140x140" src="{{ organization.logo.url }}" class="img-rounded">
 		</div>
 		<div class="col-md-10 column">
-            <h2>Welcome to {{ organization.name }}</h2>
+            <h2 id="haweb-welcome">Welcome to {{ organization.name }}</h2>
             <div class="navbar navbar-default" role="navigation">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
                         <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -55,7 +53,7 @@
 
             <div class="row clearfix">
                 <div class="col-md-12 column">
-                    <ul class="breadcrumb">
+                    <ul class="breadcrumb" id="haweb-breadcrumb">
                         {{ breadcrumb | safe }}
                     </ul>
                 </div>
@@ -83,11 +81,7 @@
                         {% else %}
                             <div class="item">
                         {%  endif %}
-                            {% if in_dev %}
-                                <img alt="800x300" src="{{ info.picture.url }}" class="img-rounded">
-                            {% else %}
-                                <img alt="picture" src="http://src.sencha.io/1500/300/{{ host }}{{ info.picture.url }}">
-                            {% endif %}
+                            <img alt="1500x300" src="{{ info.picture.url }}" class="img-rounded">
 
                             <div class="carousel-caption">
                                 <h4>{{ info.title }}</h4>
@@ -107,7 +101,7 @@
 		</div>
 	</div>
 
-    <div class="row clearfix">
+    <div class="row clearfix" id="haweb-content">
 		<div class="col-md-12 column">
             <div class="jumbotron">
                 {%  block display_content %}

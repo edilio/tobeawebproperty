@@ -45,7 +45,7 @@
 
 .carousel_img{
     height: 300px;
-    width: 1600px;
+    width: 1500px;
 }
 
 .red{
@@ -57,3 +57,24 @@
 }
 
 .tnav .navbar .container { height: 28px; }
+
+#haweb-content{
+    margin-top: 10px;
+}
+
+#logo{
+    margin-top: 15px;
+    text-align: center;
+}
+
+#haweb-breadcrumb{
+    margin-top: -15px;
+}
+
+#carousel-322875{
+    margin-top: -10px;
+}
+
+#haweb-welcome{
+    text-align: center;
+}
