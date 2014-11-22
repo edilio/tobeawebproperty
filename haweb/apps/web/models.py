@@ -6,9 +6,14 @@ from django.conf import settings
 
 from pygeocoder import Geocoder
 
-from haweb.libs.image import resize
+# from haweb.libs.image import resize
 
 from .states import STATE_CHOICES
+
+
+def gen_resizing_help(width, height):
+    video_url = "https://www.youtube.com/watch?v=lMd6nQeryjs"
+    return "Please, use this video {} to crop the img to {}x{} pixels".format(video_url, width, height)
 
 
 def next_index(model_name, app='web'):
@@ -136,7 +141,7 @@ class Organization(models.Model):
     city = models.CharField(max_length=50)
     state = models.CharField(max_length=2, choices=STATE_CHOICES)
     zip = models.CharField(max_length=11)
-    logo = models.ImageField(upload_to="logos")
+    logo = models.ImageField(upload_to="logos", help_text=gen_resizing_help(140, 140))
     home_page = models.TextField()
     about_us_page = models.TextField(default="")
     contact_us_page = models.TextField(default="")
@@ -188,7 +193,7 @@ class Menu(models.Model):
 
 
 class CarouselInfo(models.Model):
-    picture = models.ImageField(upload_to="photos")
+    picture = models.ImageField(upload_to="photos", help_text=gen_resizing_help(1024, 300))
     title = models.CharField(max_length=150)
     description = models.CharField(max_length=250)
     organization = models.ForeignKey(Organization, related_name="carousel")
@@ -199,7 +204,7 @@ class CarouselInfo(models.Model):
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         super(CarouselInfo, self).save(force_insert, force_update, using, update_fields)
-        resize(self.picture)
+        # resize(self.picture)
 
 
 class Content(models.Model):

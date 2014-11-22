@@ -44,8 +44,11 @@
 
 
 .carousel_img{
-    height: 300px;
-    width: 1500px;
+  /*position: absolute;*/
+  /*top: 0;*/
+  /*left: 0;*/
+  min-width: 100%;
+  /*height: 500px;*/
 }
 
 .red{
@@ -77,4 +80,9 @@
 
 #haweb-welcome{
     text-align: center;
+}
+
+#haweb-content .jumbotron{
+    margin-bottom: 0px;
+    padding-top: 2px;
 }
