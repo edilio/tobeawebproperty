@@ -149,13 +149,14 @@ DJANGO_APPS = (
     # 'django.contrib.admindocs',
     'django.contrib.humanize',
     'django.contrib.sitemaps',
+    'localflavor',
 
 )
 
 THIRD_PARTY_APPS = (
     'rest_framework',
     'robots',
-    # 'debug_toolbar',
+    'debug_toolbar',
     'rest_framework_swagger',
 
 )
@@ -235,5 +236,5 @@ if not DEBUG:
     ROBOTS_CACHE_TIMEOUT = 60*60*24
 
 ROBOTS_SITEMAP_URLS = [
-    'http://demo.beawebpropertycom/sitemap.xml',
+    'http://demo.jedutils.com/sitemap.xml',
 ]

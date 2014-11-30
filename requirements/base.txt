@@ -12,3 +12,4 @@ Fabric==1.10.0
 django-robots==1.0
 Pillow==2.6.1
 pygeocoder==1.2.5
+django-localflavor==1.0

@@ -1,9 +1,7 @@
 from django.contrib import admin
 from django import forms
-from .models import UserProfile
+from .models import UserProfile, City, ZipCode, Unit, Tenant, Contract
 from django.utils.translation import ugettext_lazy as _
-
-# from django.contrib.auth.admin import UserAdmin
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
@@ -69,5 +67,32 @@ class UserProfileAdmin(UserAdmin):
         (_('Title'), {'fields': ('title', )}),
         (_('Phone'), {'fields': ('phone', )}),
     )
+
+
+@admin.register(City)
+class CityAdmin(admin.ModelAdmin):
+    list_display = ('name', )
+
+
+@admin.register(ZipCode)
+class ZipCodeAdmin(admin.ModelAdmin):
+    list_display = ('city', 'state', 'zip_code')
+    list_filter = ('state', )
+
+
+@admin.register(Tenant)
+class TenantAdmin(admin.ModelAdmin):
+    list_display = ('tenant_id', 'order_on', 'cell_phone', 'home_phone', 'work_phone')
+
+
+@admin.register(Unit)
+class UnitAdmin(admin.ModelAdmin):
+    list_display = ('unit_id', 'address', 'apartment', 'zip_code')
+
+
+@admin.register(Contract)
+class ContractAdmin(admin.ModelAdmin):
+    list_display = ('tenant', 'unit', 'first_day', 'last_day')
+
 
 admin.site.register(UserProfile, UserProfileAdmin)

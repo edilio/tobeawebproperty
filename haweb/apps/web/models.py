@@ -8,7 +8,7 @@ from pygeocoder import Geocoder
 
 # from haweb.libs.image import resize
 
-from .states import STATE_CHOICES
+from haweb.apps.core.states import STATE_CHOICES
 
 
 def gen_resizing_help(width, height):
