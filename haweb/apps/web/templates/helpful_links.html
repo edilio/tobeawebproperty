@@ -6,7 +6,7 @@
     {% for link in object_list %}
         <li>
             <a href="{{ link.url }}">
-                <div>{{ link.title }}</div>
+                {{ link.title }}
             </a>
             <div>{{ link.description }}</div>
 
