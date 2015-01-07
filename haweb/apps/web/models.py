@@ -147,8 +147,8 @@ class Organization(models.Model):
     contact_us_page = models.TextField(default="")
     five_year_plan = models.FileField(null=True, blank=True)
     selected_theme = models.CharField(max_length=100, default='default')
-    lat = models.FloatField(default=25.8649876, blank=True)
-    lng = models.FloatField(default=-80.26423799999999, blank=True)
+    lat = models.FloatField(default=25.8649876, blank=True, help_text="latitude... put 0 if you don't know")
+    lng = models.FloatField(default=-80.26423799999999, blank=True, help_text="longitude... put 0 if you don't know")
 
     @property
     def city_state_zip(self):
@@ -167,7 +167,7 @@ class Organization(models.Model):
         lng = self.lng
         invalid = ((lat == 25.8649876) and (lng == -80.264238)) or (lat == 0 and lng == 0)
         return not invalid
-        
+
     def save(self, *args, **kwargs):
         # meaning the user left the fields in blank
         if not self.is_lat_long_valid():

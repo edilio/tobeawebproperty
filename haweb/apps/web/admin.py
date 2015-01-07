@@ -61,7 +61,7 @@ class CarouselInfoInline(admin.StackedInline):
 
 @admin.register(Organization)
 class OrganizationAdmin(TinymceAdmin):
-    list_display = ('name', 'address', 'city_state_zip', 'selected_theme')
+    list_display = ('name', 'address', 'city_state_zip', 'selected_theme', 'lat', 'lng')
 
     inlines = [CarouselInfoInline]
 
