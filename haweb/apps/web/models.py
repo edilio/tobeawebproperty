@@ -147,8 +147,8 @@ class Organization(models.Model):
     contact_us_page = models.TextField(default="")
     five_year_plan = models.FileField(null=True, blank=True)
     selected_theme = models.CharField(max_length=100, default='default')
-    lat = models.FloatField(default=25.8649876)
-    lng = models.FloatField(default=-80.26423799999999)
+    lat = models.FloatField(default=25.8649876, blank=True)
+    lng = models.FloatField(default=-80.26423799999999, blank=True)
 
     @property
     def city_state_zip(self):
@@ -163,6 +163,7 @@ class Organization(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
+        # meaning the user left the fields in blank
         if (self.lat == 25.8649876) and (self.lng == -80.264238):
             full_address = "{0} {1}".format(self.address, self.city_state_zip)
             results = Geocoder.geocode(full_address)
