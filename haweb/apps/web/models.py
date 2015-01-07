@@ -162,9 +162,15 @@ class Organization(models.Model):
     def __unicode__(self):
         return self.name
 
+    def is_lat_long_valid(self):
+        lat = self.lat
+        lng = self.lng
+        invalid = ((lat == 25.8649876) and (lng == -80.264238)) or (lat == 0 and lng == 0)
+        return not invalid
+        
     def save(self, *args, **kwargs):
         # meaning the user left the fields in blank
-        if (self.lat == 25.8649876) and (self.lng == -80.264238):
+        if not self.is_lat_long_valid():
             full_address = "{0} {1}".format(self.address, self.city_state_zip)
             results = Geocoder.geocode(full_address)
             self.lat, self.lng = results[0].coordinates
