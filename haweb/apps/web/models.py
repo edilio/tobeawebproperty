@@ -138,7 +138,8 @@ class ResourceForm(models.Model):
 THEMES_OPTIONS = (
     ('default', 'Default'),
     ('cerulean', 'Cerulean'),
-    ('cosmo', 'Cosmo')
+    ('cosmo', 'Cosmo'),
+    ('united', 'United'),
 )
 
 
