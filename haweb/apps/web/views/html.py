@@ -54,14 +54,14 @@ def gen_boot_swatch_less(org):
     if org.selected_theme == 'default':
         return static('less/bootstrap.less')
     else:
-        return static('less/{}/bootswatch.less'.format(org.selected_theme))
+        return static('css/{}/bootswatch.less'.format(org.selected_theme))
 
 
 def gen_variable_less(org):
     if org.selected_theme == 'default':
         return ''
     else:
-        return static('less/{}/variable.less'.format(org.selected_theme))
+        return static('css/{}/variable.less'.format(org.selected_theme))
 
 
 def gen_bootstrap_info(org):
