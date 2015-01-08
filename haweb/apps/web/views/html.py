@@ -61,7 +61,7 @@ def gen_variable_less(org):
     if org.selected_theme == 'default':
         return ''
     else:
-        return static('css/{}/variable.less'.format(org.selected_theme))
+        return static('css/{}/variables.less'.format(org.selected_theme))
 
 
 def gen_bootstrap_info(org):
