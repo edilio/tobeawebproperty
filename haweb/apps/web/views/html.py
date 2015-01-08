@@ -75,7 +75,7 @@ def gen_bootstrap_info(org):
 
 def gen_common_context(request):
     organization = Organization.objects.all()[0]
-    return {
+    result = {
         'now': timezone.now(),
         'menu': gen_menu(),
         'organization': organization,
@@ -83,7 +83,9 @@ def gen_common_context(request):
         'in_dev': settings.IN_DEV,
         'host': "{}://{}".format(request.scheme, request.get_host()),
 
-    }.update(gen_bootstrap_info(organization))
+    }
+    result.update(gen_bootstrap_info(organization))
+    return result
 
 
 def common_render(request, template):
