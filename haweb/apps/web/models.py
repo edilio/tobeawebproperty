@@ -135,6 +135,13 @@ class ResourceForm(models.Model):
         return self.description[:250]
 
 
+THEMES_OPTIONS = (
+    ('default', 'Default'),
+    ('cerulean', 'Cerulean'),
+    ('cosmo', 'Cosmo')
+)
+
+
 class Organization(models.Model):
     name = models.CharField(max_length=150)
     address = models.CharField(max_length=150)
@@ -146,7 +153,7 @@ class Organization(models.Model):
     about_us_page = models.TextField(default="")
     contact_us_page = models.TextField(default="")
     five_year_plan = models.FileField(null=True, blank=True)
-    selected_theme = models.CharField(max_length=100, default='default')
+    selected_theme = models.CharField(max_length=100, default='default', choices=THEMES_OPTIONS)
     lat = models.FloatField(default=25.8649876, blank=True, help_text="latitude... put 0 if you don't know")
     lng = models.FloatField(default=-80.26423799999999, blank=True, help_text="longitude... put 0 if you don't know")
 

@@ -4,6 +4,7 @@ from django.views.generic.list import ListView
 from django.utils import timezone
 from django.contrib.auth.models import Group
 from django.conf import settings
+from django.templatetags.static import static
 
 from ..models import Menu, Organization, Content, FAQ, HelpfulLink, Career, ResourceForm, ResourceCategory
 from haweb.apps.core.models import UserProfile
@@ -49,15 +50,40 @@ def gen_breadcrumb(path):
     return "".join(result)
 
 
+def gen_boot_swatch_less(org):
+    if org.selected_theme == 'default':
+        return static('less/bootstrap.less')
+    else:
+        return static('less/{}/bootswatch.less'.format(org.selected_theme))
+
+
+def gen_variable_less(org):
+    if org.selected_theme == 'default':
+        return ''
+    else:
+        return static('less/{}/variable.less'.format(org.selected_theme))
+
+
+def gen_bootstrap_info(org):
+    bootstrap_css_url = static('css/{}/bootstrap.min.css'.format(org.selected_theme))
+    return {
+        'bootstrap_css_url': bootstrap_css_url,
+        'bootswatch_less': gen_boot_swatch_less(org),
+        'variable_less': gen_variable_less(org),
+    }
+
+
 def gen_common_context(request):
+    organization = Organization.objects.all()[0]
     return {
         'now': timezone.now(),
         'menu': gen_menu(),
-        'organization': Organization.objects.all()[0],
+        'organization': organization,
         'breadcrumb': gen_breadcrumb(request.path_info),
         'in_dev': settings.IN_DEV,
-        'host': "{}://{}".format(request.scheme, request.get_host())
-    }
+        'host': "{}://{}".format(request.scheme, request.get_host()),
+
+    }.update(gen_bootstrap_info(organization))
 
 
 def common_render(request, template):
