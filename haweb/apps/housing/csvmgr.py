@@ -1,4 +1,5 @@
 import csv
+from django.utils import timezone
 
 from ..core.models import Tenant, Unit, ZipCode, City, Contract
 
@@ -225,5 +226,20 @@ def export_housing():
     return ""
 
 
-def export_active_tenants():
-    return ""
+def export_active_tenants(filename):
+    now = timezone.now()
+    active_contracts = Contract.objects.filter(first_day__lt=now, last_day__gt=now)
+    with open(filename, 'wb') as f:
+        writer = csv.writer(f)
+        for contract in active_contracts:
+            tenant = contract.tenant
+            unit = contract.unit
+            code = unit.zip_code
+            row = [tenant.tenant_id, tenant.first_name, tenant.mi, tenant.last_name, tenant.email,
+                   tenant.cell_phone, tenant.home_phone, tenant.work_phone,
+                   contract.first_day.strftime('%Y-%m-%d'), contract.last_day.strftime('%Y-%m-%d'),
+                   unit.unit_id,
+                   unit.address, unit.apartment, code.city.name, code.state, code.zip_code]
+            print(row)
+            writer.writerow(row)
+    print('test')

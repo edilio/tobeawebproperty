@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from csvmgr import validate_csv, import_new_admissions
+from csvmgr import validate_csv, import_new_admissions, export_active_tenants
 from ..core.models import Tenant, Unit, Contract, ZipCode, City
 
 
@@ -48,3 +48,7 @@ class CsvMgrTest(TestCase):
         # city should be titled
         city_str = code.city.name
         self.assertEqual(city_str, city_str.title())
+
+    def test_export_active_tenants(self):
+        import_new_admissions("/Users/ediliogallardo/Downloads/New Admissions Sample - Sheet1.csv")
+        export_active_tenants('/tmp/haweb.csv')
