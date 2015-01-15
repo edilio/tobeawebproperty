@@ -17,14 +17,16 @@ def gen_resizing_help(width, height):
 
 
 def next_index(model_name, app='web'):
-    model = get_model(app, model_name)
-
-    qs = model.objects
+    result = 0
     try:
+        model = get_model(app, model_name)
+
+        qs = model.objects
         m = qs.reverse()[0]
-        return m.index + 1
-    except IndexError:
-        return 1
+        result = m.index
+    except:
+            pass
+    return result
 
 
 def next_faq_index():
@@ -99,8 +101,12 @@ class Career(models.Model):
         return self.description[:250]
 
 
+def next_resource_category_index():
+    return next_index('ResourceCategory')
+
+
 class ResourceCategory(models.Model):
-    index = models.PositiveIntegerField(default=next_career_index)
+    index = models.PositiveIntegerField(default=next_resource_category_index)
     name = models.CharField(max_length=250)
 
     class Meta:

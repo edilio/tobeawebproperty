@@ -1,6 +1,7 @@
 from django.contrib import admin
-from django import forms
-from django.db import models
+# from django import forms
+# from django.db import models
+from django.db import utils
 from django.db.models.loading import get_model
 
 from .models import (FAQ,
@@ -93,8 +94,12 @@ class ContentAdmin(TinymceAdmin):
 
 def insert_default_user_groups():
     Group = get_model('auth', 'Group')
-    if not Group.objects.exists():
-        Group.objects.create(name='Displayable Users')
-        Group.objects.create(name='Commissioners')
+    try:
+        if not Group.objects.exists():
+            Group.objects.create(name='Displayable Users')
+            Group.objects.create(name='Commissioners')
+    except utils.ProgrammingError:
+        pass
+
 
 insert_default_user_groups()
