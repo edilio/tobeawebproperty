@@ -1,4 +1,4 @@
-# Django settings for haweb project.
+import sys
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -238,3 +238,12 @@ if not DEBUG:
 ROBOTS_SITEMAP_URLS = [
     'http://demo.jedutils.com/sitemap.xml',
 ]
+
+IN_TEST = len(sys.argv) > 1 and sys.argv[1] == 'test'
+IN_QA = os.environ.get('JENKINS_URL')
+# Check to see if we're in testing first
+if IN_QA or IN_TEST:
+    DEBUG=True
+    # database overrides
+    DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
+    DATABASES['default']['NAME'] = ':memory:'
