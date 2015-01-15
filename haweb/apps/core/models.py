@@ -64,6 +64,7 @@ class Tenant(models.Model):
     cell_phone = PhoneNumberField(null=True, blank=True, db_index=True)
     home_phone = PhoneNumberField(null=True, blank=True, db_index=True)
     work_phone = PhoneNumberField(null=True, blank=True, db_index=True)
+    email = models.EmailField(null=True)
 
     @property
     def order_on(self):
