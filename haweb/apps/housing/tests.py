@@ -1,6 +1,7 @@
 from django.test import TestCase
 
-from csvmgr import validate_csv
+from csvmgr import validate_csv, import_new_admissions
+from ..core.models import Tenant, Unit, Contract, ZipCode, City
 
 
 class CsvMgrTest(TestCase):
@@ -23,3 +24,12 @@ class CsvMgrTest(TestCase):
             'first_name': 1
         }
         self.assertDictEqual(column_pos, expected_pos)
+
+    def test_import_new_admissions(self):
+        import_new_admissions("/Users/ediliogallardo/Downloads/New Admissions Sample - Sheet1.csv")
+
+        self.assertEqual(City.objects.count(), 1)
+        self.assertEqual(ZipCode.objects.count(), 1)
+        self.assertEqual(Contract.objects.count(), 1)
+        self.assertEqual(Unit.objects.count(), 1)
+        self.assertEqual(Tenant.objects.count(), 1)

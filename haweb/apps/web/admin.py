@@ -87,10 +87,10 @@ class ContentAdmin(TinymceAdmin):
 
     # formfield_overrides = {models.TextField: {'widget': forms.Textarea(attrs={'class': 'ckeditor'})}, }
 
-#
 # @admin.register(WorkOrder)
 # class WorkOrderAdmin(admin.ModelAdmin):
 #     list_display = ('work_order_no', 'priority', 'scheduled', )
+
 
 def insert_default_user_groups():
     Group = get_model('auth', 'Group')
@@ -98,7 +98,7 @@ def insert_default_user_groups():
         if not Group.objects.exists():
             Group.objects.create(name='Displayable Users')
             Group.objects.create(name='Commissioners')
-    except utils.ProgrammingError:
+    except:
         pass
 
 
