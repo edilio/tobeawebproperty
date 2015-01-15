@@ -63,8 +63,14 @@ def get_tenant(tenant_id, first_name, mi, last_name, email):
 def import_tenant(column_pos, row):
     tenant_id = row[column_pos['tenant_id']]
     first_name = row[column_pos['first_name']]
+    if first_name:
+        first_name = first_name.capitalize()
     last_name = row[column_pos['last_name']]
+    if last_name:
+        last_name = last_name.capitalize()
     mi = row[column_pos['mi']]
+    if mi:
+        mi = mi.upper()
     email = row[column_pos['email']]
     tenant = get_tenant(tenant_id, first_name, mi, last_name, email)
     if not tenant:
@@ -162,8 +168,8 @@ def import_new_admissions(filename):
     :return:
     """
     required_fields = ['tenant_id', 'first_name', 'mi', 'last_name', 'email', 'cell_phone', 'home_phone',
-                        'work_phone', 'first_day', 'last_day', 'unit_id',
-                        'address', 'apartment', 'city', 'state', 'zip_code']
+                       'work_phone', 'first_day', 'last_day', 'unit_id',
+                       'address', 'apartment', 'city', 'state', 'zip_code']
     with open(filename, 'rb') as csvfile:
         rows = csv.reader(csvfile, dialect='excel')
         i = 0
@@ -182,7 +188,6 @@ def import_new_admissions(filename):
                 # current_tenant = unit.current_tenant
                 contract = Contract.objects.create(tenant=tenant, unit=unit, first_day=first_day, last_day=last_day)
             i += 1
-
 
 
 def import_move_outs(filename):

@@ -33,3 +33,18 @@ class CsvMgrTest(TestCase):
         self.assertEqual(Contract.objects.count(), 1)
         self.assertEqual(Unit.objects.count(), 1)
         self.assertEqual(Tenant.objects.count(), 1)
+
+        # first_name and last_name must be capitalized and mi should be upper
+        tenant = Tenant.objects.all()[0]
+
+        self.assertEqual(tenant.first_name, tenant.first_name.capitalize())
+        self.assertEqual(tenant.last_name, tenant.last_name.capitalize())
+        self.assertEqual(tenant.mi, tenant.mi.upper())
+
+        # state must be upper case
+        code = ZipCode.objects.all()[0]
+        self.assertEqual(code.state, code.state.upper())
+
+        # city should be titled
+        city_str = code.city.name
+        self.assertEqual(city_str, city_str.title())
