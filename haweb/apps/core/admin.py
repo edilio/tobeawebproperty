@@ -77,17 +77,21 @@ class CityAdmin(admin.ModelAdmin):
 @admin.register(ZipCode)
 class ZipCodeAdmin(admin.ModelAdmin):
     list_display = ('city', 'state', 'zip_code')
-    list_filter = ('state', )
+    list_filter = ('state', 'city')
+    search_fields = ('city__name', 'zip_code')
 
 
 @admin.register(Tenant)
 class TenantAdmin(admin.ModelAdmin):
     list_display = ('tenant_id', 'order_on', 'cell_phone', 'home_phone', 'work_phone')
+    search_fields = ('tenant_id', 'cell_phone', 'home_phone', 'work_phone', 'first_name', 'last_name')
 
 
 @admin.register(Unit)
 class UnitAdmin(admin.ModelAdmin):
     list_display = ('unit_id', 'address', 'apartment', 'zip_code')
+    search_fields = ('unit_id', 'address', 'apartment')
+    list_filter = ('zip_code', )
 
 
 @admin.register(Contract)
