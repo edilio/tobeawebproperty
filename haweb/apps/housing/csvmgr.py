@@ -204,11 +204,48 @@ def import_new_admissions(filename):
 def import_move_outs(filename):
     """
     The structure of the file should be like:
-    [tenant_id] or [first_name, mi, last_name], unit_id or [address, apartment, city, state, zip_code], move_out_day
+    [tenant_id] or [first_name, mi, last_name] or email, unit_id or [address, apartment, city, state, zip_code],
+    move_out_day
     :param filename:
     :return:
     """
-    pass
+    required_fields = ['tenant_id', 'first_name', 'mi', 'last_name', 'email', 'unit_id',
+                       'address', 'apartment', 'city', 'state', 'zip_code',
+                       'move_out_day']
+
+    def real_import(reader):
+        i = 0
+        for row in reader:
+            if i == 0:
+                row0 = row
+
+                ok, column_pos = validate_csv(row0, required_fields)
+                if not ok:
+                    raise Exception('Required fields are not present in the documents')
+            else:
+                tenant = import_tenant(column_pos, row)
+                unit = import_unit(column_pos, row)
+                move_out_day = row[column_pos['move_out_day']]
+                contract = unit.current_contract
+                if contract and contract.tenant == tenant:
+                    contract.move_out_date = move_out_day
+                    contract.save()
+                else:
+                    active_contracts = Contract.objecta.filter(tenant=tenant, unit=unit).order_by('-last_day')
+                    if active_contracts.exists():
+                        contract = active_contracts[0]
+                        contract.move_out_date = move_out_day
+                        contract.save()
+            i += 1
+
+
+    if isinstance(filename, str):
+        with open(filename, 'rb') as csvfile:
+            rows = csv.reader(csvfile, dialect='excel')
+            real_import(rows)
+    else:
+        rows = csv.reader(filename, dialect='excel')
+        real_import(rows)
 
 
 def import_active_contracts(filename):
@@ -232,10 +269,6 @@ def import_housing(filename):
     pass
 
 
-def export_housing():
-    return ""
-
-
 def value(x):
     if x:
         return x
@@ -243,14 +276,42 @@ def value(x):
         return ""
 
 
+def export_housing(filename_or_response):
+    """
+    :param filename_or_response: can be a real filename or a django response
+    :return:
+    """
+    def export(writer):
+        row = ['unit_id', 'address', 'apartment', 'city', 'state', 'zip_code']
+        writer.writerow(row)
+        for unit in Unit.objects.all():
+            code = unit.zip_code
+            row = [value(unit.unit_id),
+                   unit.address, value(unit.apartment), code.city.name, code.state, code.zip_code]
+            print(row)
+            writer.writerow(row)
+
+    if isinstance(filename_or_response, str):
+        with open(filename_or_response, 'wb') as f:
+            csv.writer(f)
+    else:
+        w = csv.writer(filename_or_response, dialect='excel')
+        export(w)
+
+
 def export_active_tenants(filename_or_response):
     """
-    :param filename: can be a real filename or a django response
+    :param filename_or_response: can be a real filename or a django response
     :return:
     """
     def export(writer):
         now = timezone.now()
         active_contracts = Contract.objects.filter(first_day__lt=now, last_day__gt=now)
+        row = ['tenant_id', 'first_name', 'mi', 'last_name', 'email',
+               'cell_phone', 'home_phone', 'work_phone',
+               'contract_first_day', 'contract_last_day',
+               'unit_id', 'address', 'apartment', 'city', 'state', 'zip_code']
+        writer.writerow(row)
         for contract in active_contracts:
             tenant = contract.tenant
             unit = contract.unit
