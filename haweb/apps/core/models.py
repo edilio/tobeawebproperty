@@ -83,9 +83,14 @@ class Tenant(models.Model):
 class Contract(models.Model):
     first_day = models.DateField()
     last_day = models.DateField()
+    move_out_date = models.DateField(null=True, blank=True)
 
     tenant = models.ForeignKey(Tenant)
     unit = models.ForeignKey(Unit)
+
+    @property
+    def move_out(self):
+        return True if self.move_out_date else False
 
     def __unicode__(self):
         return "{} at {}".format(self.tenant.order_on, unicode(self.unit))
