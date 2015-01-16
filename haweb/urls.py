@@ -10,7 +10,6 @@ from haweb.apps.web.sitemaps import sitemaps
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
     url(r'^$', html.home, name='home'),
     url(r'^about-us$', html.about_us, name='about_us'),
     url(r'^contact-us$', html.contact_us, name='contact_us'),
@@ -21,7 +20,7 @@ urlpatterns = patterns('',
     url(r'^careers/$', html.CareerListView.as_view(), name='career_list'),
     url(r'^resources/$', html.ResourceListView.as_view(), name='resource_list'),
     url(r'^staff/$', html.StaffListView.as_view(), name='staff_list'),
-    url(r'^commisioners/$', html.CommissionerListView.as_view(), name='commissioner_list'),
+    url(r'^commissioners/$', html.CommissionerListView.as_view(), name='commissioner_list'),
     url(r'^get-directions$', html.get_directions, name='get_directions'),
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
@@ -29,6 +28,8 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 
+    # issues
+    url(r'^issues/', include('haweb.apps.issues.urls')),
     # Api
     url(r'^api/v1/', include('haweb.apps.web.urls.api')),
     url(r'^api/v1/docs/', include('rest_framework_swagger.urls')),

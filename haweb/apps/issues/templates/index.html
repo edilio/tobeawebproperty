@@ -1,10 +1,849 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
+{% load i18n %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+<link rel="stylesheet" href="http://www.gilsonsoftware.com/jquery/jquery.mobile-1.0.1.min.css" />
+<link rel="stylesheet" href="http://www.gilsonsoftware.com/jquery/index.css" >
+<script type="text/javascript" src="http://www.gilsonsoftware.com/jquery/jquery-1.7.min.js"></script>
+<script type="text/javascript" src="http://www.gilsonsoftware.com/jquery/jquery.mobile-1.0.1.min.js"></script>
+<script type="text/javascript" src="http://www.gilsonsoftware.com/jquery/jquery.maskedinput.js"></script>
+<style>
+    .good {
+        width:140px;
+        font-size: 1.3em;
+        font-weight: bold;
+    }
+
+    .content-primary-login {
+        width: 100%;
+        margin-top: 10px;
+        margin-left: 33%;
+        margin-right: 1%;
+        padding-right: 1%;
+    }
+    .content-primary-login ul:first-child {
+        margin-top: 0;
+    }
+
+    .type-interior .content-primary-login {
+        padding: 1.5em 6% 3em 0;
+        margin: 0;
+        float:right;
+    }
+
+    .fields-interior {
+        margin-right: 70%;
+        padding-right: 3%;
+        float:right;
+    }
+
+    .content-primary-or {
+        margin-left: 7%;
+        margin-right: 1%;
+        padding-right: 1%;
+        font-size: 1.3em;
+        font-weight: bold;
+    }
+
+    .center-div{
+        margin-left: 30%;
+    }
+
+    .full-center-div{
+        margin-left: 5%;
+    }
+
+    .yes-no-center-div{
+        margin-left: 17%;
+    }
+
+    .wait-list-bold{
+        font-weight: bold;
+    }
+
+    .two-buttons{
+        margin-left: 30%;
+    }
+
+    .center
+    {
+        text-align: center;
+    }
+
+    .center-table
+    {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: left;
+    }
+
+    .confirmation-commands{
+        width:50%;
+        margin-left: 25%;
+    }
+
+    .std-buttons{
+        background: #006633;
+        color: #FFFFFF
+    }
+
+</style>
+
+{%  block  extra %}
+{% endblock %}
+
+<script type="text/javascript">
+
+var None = '',
+        True = 'Yes',
+        False = 'No';
+
+datetime = {};
+datetime.datetime = function(year,month,day, hour, min, sec){
+    return month + "/" + day + "/" + year;
+};
+
+function encode(numbers){
+    var encode_dict = {
+                '0' : '5',
+                '1' : '6',
+                '2' : '7',
+                '3' : '8',
+                '4' : '9',
+                '5' : '0',
+                '6' : '1',
+                '7' : '2',
+                '8' : '3',
+                '9' : '4'
+            },
+            aux = "",
+            i;
+    for (i = 0; i < numbers.length; i += 1){
+        aux += encode_dict[numbers[i]];
+    }
+    return aux;
+}
+
+function get_encoded(){
+    var last_4 = $("#last_four").val();
+    return encode(last_4);
+}
+
+function showLoading(){
+    //$.mobile.pageLoading();
+    $.mobile.showPageLoadingMsg()
+}
+
+function hideLoading(){
+    //$.mobile.pageLoading(true);
+    $.mobile.hidePageLoadingMsg();
+}
+
+function showMessage(msg){
+    Ext.Msg.show({
+        title: 'Information',
+        msg: msg,
+        buttons: Ext.Msg.OK,
+        icon: Ext.window.MessageBox.INFO
+    })
+}
+
+function validateLoginForm () {
+    var errors = "",
+            email_address = $('#login-email_address').val(),
+            last_four = $("#last_four").val(),
+            last_name = $("#last_name").val();
+
+    if (email_address === ""){
+        if (last_four === ""){
+            errors += "{% trans 'Last four digits of SSN field must have a value' %}\n";
+        }
+        else if (last_four.length !== 4){
+            errors += "{% trans 'Last four digits of SSN field must be a four 4 digits string' %}\n";
+        }
+        else if (last_four.length == 4){
+            var temp = parseInt(last_four);
+            if (isNaN(temp)){
+                errors += "{% trans 'Last four digits of SSN field must be a four 4 digits string' %}\n";
+            }
+        }
+    }
+
+    if ((email_address === "")&&(last_name === "")){
+        errors += "{% trans 'You must enter your email address or your last name in order to login' %}\n";
+    }
+
+    if (errors !== "") {
+        showMessage("{% trans 'The following is required' %}:\n" + errors);
+    }
+    return (errors === "");
+}
+
+function get_data(url,dict,func){
+    dict['csrfmiddlewaretoken'] = $('input[name="csrfmiddlewaretoken"]').val();
+    $.post(
+            url,
+            dict,
+            func
+    );
+}
+
+function validateEmailAddress(value1, value2){
+    var errors = "";
+
+    if (value1 === ""){
+        errors += "{% trans 'Email Address field must have a value' %}\n";
+    }
+    if (value2 === ""){
+        errors += "{% trans 'Re-type Email Address field must have a value' %}\n";
+    }
+    if(value1 !== value2){
+        errors += "{% trans 'Email Address and Re-type Email Address fields must me the same' %}\n";
+    }
+
+    if (errors !== "") {
+        showMessage("{% trans 'The following is required' %}:\n" + errors);
+    }
+    return (errors === "");
+
+}
+
+function validateContactForm () {
+    var value1 = $("#id_email").val(),
+            value2 = $("#id_email2").val();
+
+    return validateEmailAddress(value1,value2);
+}
+
+function validateCreateEmailForm () {
+    var value1 = $("#create-id-email").val(),
+            value2 = $("#create-id-email2").val();
+
+    return validateEmailAddress(value1,value2);
+}
+
+function fillNewResidentComplaintPage()
+{
+    var
+        contract_id = sessionStorage.getItem('contract_id');
+
+    get_data(
+            '{% url get_unit_info %}',
+            { 'contract_id' : contract_id },
+            function(data) {
+                var unit_info = eval(data)[0];
+                if (unit_info['result'] === 'success'){
+                    $("#id-address").val(unit_info['address']);
+                    $("#id-tenant").val(unit_info['tenant']);
+                    $('#id-unit').val(unit_info['unit']);
+                    $("#id-project").val(unit_info['project']);
+                    $('#id-building').val(unit_info['building']);
+                    window.location.href = "#create-new-resident-complaint-page";
+                    hideLoading();
+                }
+                else{
+                    showMessage(unit_info['error']);
+                }
+            }
+    );
+}
+
+function loadCreateNewResidentComplaintPage(){
+    showLoading();
+    fillNewResidentComplaintPage();
+}
+
+function updateEmailAddress(email){
+    var contract_id = sessionStorage.getItem("contract_id");
+    get_data(
+            '{% url update_tenant_email %}',
+            { 'contract_id' : contract_id, 'email': email },
+            function (data){
+                var result = eval(data)[0];
+                if (result['result'] === 'success'){
+                    loadCreateNewResidentComplaintPage();
+                }
+                else{
+                    showMessage(result['error']);
+                }
+            }
+    );
+}
+
+function createEmailNextBtnClick(){
+    if (validateCreateEmailForm()){
+        updateEmailAddress($("#create-id-email").val());
+
+    }
+}
+
+function setComboValue(id, value){
+    $('#' + id).val(value);
+    $('#' + id).selectmenu('refresh',true);
+}
+
+function selectRadioValue(field_name, field_value) {
+    $('input[name=' + field_name + ']:checked').attr("checked",false);
+    $('input:radio[name=' + field_name + ']:radio[value=' + field_value + ']').attr("checked", true);
+    $('input[name=' + field_name + ']').checkboxradio('refresh');
+}
+
+function lineBreaks(text){
+    return text.replace("\n",'<br/>');
+}
+
+function get_value(value){
+    if (value === undefined)
+        return "";
+    else
+        return value;
+}
+
+function QuotedStr(s){
+    return '"' + s + '"';
+}
+
+function fillJobs(data){
+    var i, job,
+            option_list = '<option value="" selected="selected">---------</option>';
+
+    for (i = 0; i < data.length; i += 1) {
+        job = data[i];
+        option_list += '<option value=' + QuotedStr(job['job__pk']) + ' id=' + QuotedStr(job['job__pk']) + '>' + job['job__name'] + '</option>';
+    }
+
+    if (option_list !== "") {
+        $("#id-job").html(option_list).selectmenu('refresh', true);
+    }
+}
+
+function areaChanged() {
+    var area_id = $('#id-area').val();
+    get_data(
+            '{% url get_jobs_for_area %}',
+            { 'area_id' : area_id },
+            function (data){
+                var result = eval(data);
+                if (result['result'] === undefined){  //'success'
+                    fillJobs(result);
+                }
+                else{
+                    showMessage(result['error']);
+                }
+            }
+    );
+}
+
+function fillIssues(data){
+    var i, issue,
+            option_list = '<option value="" selected="selected">---------</option>';
+
+    for (i = 0; i < data.length; i += 1) {
+        issue = data[i];
+        option_list += '<option value=' + QuotedStr(issue['pk']) + ' id=' + QuotedStr(issue['pk']) + '>' + issue['name'] + '</option>';
+    }
+
+    if (option_list !== "") {
+        $("#id-issue").html(option_list).selectmenu('refresh', true);
+    }
+}
+
+// log type: Health, Safety, Maintenance
+// issue types: they are sub-types of log-types
+function logTypeChanged() {
+    var log_type_id = $('#id-log-types').val();
+    get_data(
+            '{% url get_issues_for_log_type %}',
+            { 'log_type_id' : log_type_id },
+            function (data){
+                var result = eval(data);
+                if (result['result'] === undefined){  //'success'
+                    fillIssues(result);
+                }
+                else{
+                    showMessage(result['error']);
+                }
+            }
+    );
+}
+
+function validateCreateResidentComplaint () {
+    var errors = "",
+            issue_id = $("#id-issue").val(),
+            notes = $("#id-notes").val();
+
+    if (issue_id === ""){
+        errors += "{% trans 'Issue field must have a value in order to create a resident complaint' %}\n";
+    }
+    if (notes === ""){
+        errors += "{% trans 'Notes field must have a value in order to create a resident complaint' %}\n";
+    }
+
+    if (errors !== "") {
+        showMessage("{% trans 'The following is required' %}:\n" + errors);
+    }
+    return (errors === "");
+}
+
+
+function residentComplaintCreateClick(){
+    showLoading();
+    var
+            participant_id = sessionStorage.getItem('participant_id');
+
+    if (validateCreateResidentComplaint()){
+        get_data(
+                '{% url create_a_resident_complaint %}',
+                {
+                    'participant_id' : sessionStorage.getItem('participant_id'),
+                    'log_type_id' : $('#id-log-types').val(),
+                    'issue_id' : $('#id-issue').val(),
+                    'notes' : $('#id-notes').val()
+                },
+                function (data){
+                    var result = eval(data)[0];
+                    if (result['result'] === 'success'){
+                        window.location.href = "#resident-complaint-confirmation-page";
+                        hideLoading();
+                    }
+                    else{
+                        showMessage(result['error']);
+                        hideLoading();
+                    }
+                }
+        );
+    }
+}
+
+function clearLoginClick() {
+    showLoading();
+
+    $("#login_user_name").val('');
+    $("#login_user_password").val('');
+
+    window.location.href = "{% url staff_login %}";
+
+
+    hideLoading();
+}
+
+function clearResidentComplaint() {
+    $("#tenant-search").val('');
+    $("#id-project").val('');
+    $("#id-building").val('');
+    $("#id-unit").val('');
+    $("#id-address").val('');
+    $("#id-tenant").val('');
+
+    $('#id-log-types').val('17');
+    $('#id-log-types').selectmenu('refresh');
+
+    $('#id-job').val('');
+    $('#id-job').selectmenu('refresh');
+
+    $("#id-notes").val('');
+}
+
+function TenantLoginAdd() {
+    var coded = get_encoded(),
+            result = validateLoginForm();
+    if (result){
+        showLoading();
+        $.post('{% url resident_complaint_login %}',
+                { 'email_address' : $('#login-email_address').val(),
+                    'last_name' : $('#last_name').val(),
+                    'myfield' : coded,
+                    'csrfmiddlewaretoken':$('input[name="csrfmiddlewaretoken"]').val()
+                },
+                function(data) {
+                    var result = eval("[" + data + "]")[0],
+                            next_url;
+
+                    clearResidentComplaint();
+
+                    if (result['result'] === 'success'){
+                        sessionStorage.setItem("contract_id", result['contract_id']);
+                        sessionStorage.setItem("participant_id", result['participant_id']);
+
+                        $('#no-credentials').attr('style',"display:none");
+                        if (result['next_url'] === 'create-new-resident-complaint-page'){
+                            loadCreateNewResidentComplaintPage();
+                        }
+                        else {
+                            next_url = '#' +result['next_url'];
+                            window.location.href = next_url;
+                        }
+                    }
+                    else{
+                        $('#no-credentials').attr('style',"display:block");
+                        hideLoading();
+                    }
+                }
+        );
+    }
+
+    $("#id-project").val('');
+    $("#id-building").val('');
+    $("#id-unit").val('');
+    $("#id-address").val('');
+    $("#id-tenant").val('');
+
+    $('#id-log-types').val('18');
+    $('#id-log-types').selectmenu('refresh');
+
+    $('#id-issue').val('');
+    $('#id-issue').selectmenu('refresh');
+
+    $("#id-notes").val('');
+}
+
+function actionSelection() {
+    var coded = get_encoded(),
+            result = validateLoginForm();
+    if (result){
+        showLoading();
+        $.post('{% url resident_complaint_login %}',
+                { 'email_address' : $('#login-email_address').val(),
+                    'last_name' : $('#last_name').val(),
+                    'myfield' : coded,
+                    'csrfmiddlewaretoken':$('input[name="csrfmiddlewaretoken"]').val()
+                },
+                function(data) {
+                    var result = eval("[" + data + "]")[0],
+                            next_url;
+
+                    if (result['result'] === 'success'){
+                        sessionStorage.setItem("contract_id", result['contract_id']);
+                        sessionStorage.setItem("participant_id", result['participant_id']);
+                        $('#no-credentials').attr('style',"display:none");
+                        $.mobile.changePage("#selection_dlg", { role : "dialog" });
+                    }
+                    else{
+                        $('#no-credentials').attr('style',"display:block");
+                        hideLoading();
+                    }
+                }
+        );
+    }
+}
+
+function viewResidentComplaintsForTenant() {
+    var
+            participant_id = sessionStorage.getItem('participant_id');
+
+    showLoading();
+
+    get_data(
+            '{% url get_all_resident_complaint_for_tenant %}',
+            { 'participant_id' : participant_id },
+            function(data) {
+                $('#wo-page').html(data);
+                window.location.href = "#resident-complaint-status-grid-page";
+                hideLoading();
+            }
+    );
+
+}
+
+function clearTenantLoginClick() {
+    showLoading();
+
+    $("#login_user_name").val('');
+    $("#login_user_password").val('');
+
+    window.location.href = "{% url rc_home %}";
+
+    hideLoading();
+}
+
+function loadPages() {
+    $.mobile.loadPage('#create-email-page');
+    $.mobile.loadPage('#create-new-resident-complaint-page');
+    $.mobile.loadPage('#resident-complaint-confirmation-page');
+    $.mobile.loadPage('#resident-complaint-status-grid-page');
+}
+
+$(document).ready(function() {
+    $("#login-email_address").focus();
+    $("#login-login-btn").click(actionSelection);
+    //$("#id-issue").change(areaChanged);
+    $("#id-log-types").change(logTypeChanged).trigger('change');
+    $("#resident-complaint-create-next-btn").click(residentComplaintCreateClick);
+    $("#wo-add-more-btn").click(TenantLoginAdd);
+    $("#wo-done-log-out-btn").click(clearTenantLoginClick);
+    $("#add-new-resident_complaint").click(TenantLoginAdd);
+    $("#check-status-resident-complaints").click(viewResidentComplaintsForTenant);
+    $("#open-wo-back-btn").click(actionSelection);
+    $("#open-wo-done-log-out-btn").click(clearTenantLoginClick);
+    $("#wo-BackBtn").click(actionSelection);
+
+    loadPages();
+});
+
+</script>
 </head>
 <body>
+{% block content %}
+    <div id="home" data-role="page" data-theme="c">
 
+        <div data-role="header" style="background: #006633">
+            <br />
+            <br />
+            <br />
+            <br />
+        </div>
+
+        {% csrf_token %}
+        <div id="formChecking">
+
+            <div id="Panel" class="content-primary-login" style="display: block">
+                <br />
+                <br />
+                <div align="left" >
+                    <h1>{% trans 'Resident Complaint System' %} </h1>
+                </div>
+                <br />
+                <br />
+
+                <div class="form-row ">
+                    <div data-role="fieldcontain">
+                        <label for="login-email_address"  >{% trans 'Email Address' %}</label>
+                        <input type="input" name="email_address" id="login-email_address" value="{{ email_address }}" class="fields-interior" />
+                    </div>
+
+                    <p class="content-primary-or" >{% trans 'OR' %}</p>
+
+                    <div data-role="fieldcontain">
+                        <label for="last_name" >{% trans 'Last Name' %}</label>
+                        <input type="input" name="last_name" id="last_name" value="{{ last_name }}" class="fields-interior" />
+
+                    </div>
+                </div>
+
+                <div class="form-row ">
+                    <br />
+                    <br />
+                    <p class="content-primary-or" >{% trans 'Must fill out last 4 of SSN' %}</p>
+                </div>
+
+                <div class="form-row ">
+                    <div data-role="fieldcontain">
+                        <label for="last_four">{% trans 'Last four digits of SSN' %}</label>
+                        <input type="input"  name="last_four" id="last_four" value="" class="fields-interior" maxlength="4" />
+                    </div>
+                </div>
+                <br />
+
+                <div id="no-credentials" style="display:none">
+                    <div class="form-row ">
+                        <p>{% trans 'We could not find anyone with the credentials provided' %} </p>
+                        <p>{% trans 'Please, try again' %}.</p>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <br />
+            <div class="two-buttons">
+                <fieldset class="ui-grid-b">
+                    <div class="ui-block-a">
+                        <a href="{% url app_home %}" data-role="button" id="login-BackBtn" rel="external" class="std-buttons">{% trans 'Back' %}</a>
+                    </div>
+                    <div class="ui-block-b">
+                        <a href="#" data-role="button" id="login-login-btn" data-rel="" class="std-buttons">{% trans 'Resident Log In' %}</a>
+                    </div>
+                </fieldset>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="create-email-page" data-role="page" data-theme="c" >
+        <div id="create-email-Panel" class='center-div' style="width:50%; text-align:center" align="center" >
+
+            <br />
+            <h1 align="center">{% trans 'Update Your E-MAIL Information' %}</h1>
+            <br />
+
+            <p>{% trans 'Our system does not have your email information neccessary for communicating with you.' %}</p>
+            <p>
+                {% trans 'Please provide your email account information before continue.' %}
+                {% trans 'If you still does not have an email account, you can use the links below to create your new email account.' %}
+                {% trans 'All of these accounts are free and secure.' %}<br />
+            </p>
+
+            <fieldset class="ui-grid-c" >
+                <div class="ui-block-a">
+                    <a data-role="button" target="_newtab" href="https://accounts.google.com/SignUp?service=mail&continue=http%3A%2F%2Fmail.google.com%2Fmail%2F%3Fui%3Dhtml%26zy%3Dl&ltmpl=default">
+                        Gmail
+                    </a>
+                </div>
+                <div class="ui-block-b">
+                    <a data-role="button" target="_newtab" href="https://edit.yahoo.com/registration?.intl=us&new=1&.done=http%3A//mail.yahoo.com&.src=ym">
+                        Yahoo
+                    </a>
+                </div>
+                <div class="ui-block-c" >
+                    <a data-role="button" target="_newtab" href="https://signup.live.com/signup.aspx?id=64855&ru=http%3a%2f%2fmail.live.com%2f%3fnewuser%3dyes&rx=http%3a%2f%2fmail.live.com&lic=1">
+                        Hotmail
+                    </a>
+                </div>
+            </fieldset>
+
+
+            <div data-role="fieldcontain">
+                <label for="create-id-email">{% trans 'Email Address' %}:</label>
+                <input type="text" id="create-id-email" name="email" value="" maxlength = "30" />
+            </div>
+
+            <div data-role="fieldcontain">
+                <label for="create-id-email2">{% trans 'Re-type Email Address' %}:</label>
+                <input type="text" id="create-id-email2" name="email2" value="" maxlength = "30" />
+            </div>
+
+
+        </div>
+
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+
+        <div class="confirmation-commands">
+            <fieldset class="ui-grid-b">
+                <div class="ui-block-a"><a href="{% url rc_home %}" data-role="button"> {% trans 'Back' %} </a></div>
+                <div class="ui-block-b"><a href="" data-role="button" onclick="createEmailNextBtnClick();"> {% trans 'Add Work Order' %} </a></div>
+            </fieldset>
+        </div>
+    </div>
+
+    <div id="create-new-resident-complaint-page" data-role="page" data-theme="c" >
+        <div data-role="header" style="background: #006633">
+            <br />
+            <h2 align="center" style="color: #FFFFFF; font-size: 18pt">{% trans 'New Resident Complaint' %}</h2>
+        </div>
+        <div id="Panel1" class='center-div' style="width:50%; text-align:center" align="center" >
+
+            <fieldset  >
+                <div data-role="fieldcontain">
+                    <label for="id-project">{% trans 'Project Name' %}:</label>
+                    <input type="text" id="id-project" name="project" value="" maxlength = "30" disabled="disabled" />
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="id-building">{% trans 'Building' %}:</label>
+                    <input type="text" id="id-building" name="building" value="" maxlength = "30" disabled="disabled"/>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="id-unit">{% trans 'Unit' %}:</label>
+                    <input type="text" id="id-unit" name="unit" value="" maxlength = "30" disabled="disabled" />
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="id-tenant">{% trans 'Tenant' %}:</label>
+                    <input type="text" id="id-tenant" name="tenant" value="" maxlength = "30" disabled="disabled"/>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="id-address">{% trans 'Address' %}:</label>
+                    <input type="text" id="id-address" name="address" value="" maxlength = "30" disabled="disabled" />
+                </div>
+            </fieldset>
+
+            <div data-role="fieldcontain">
+                <label for="id-log-types" class="required">Complaint Type:</label>
+                <select name="log-type" id="id-log-types">
+                    <option value="">---------</option>
+                    <option value="18" selected="selected">{% trans 'Maintenance Issues' %}</option>
+                    <option value="16">{% trans 'Tenant Health Issues' %}</option>
+                    <option value="17">{% trans 'Safety Issues' %}</option>
+                </select>
+            </div>
+
+            <div data-role="fieldcontain">
+                <div id="issue-div">
+                    <label for="id-issue" class="select">Issue Type</label>
+                    <select name="issue" id="id-issue">
+                    </select>
+                </div>
+            </div>
+
+            <div data-role="fieldcontain">
+                <label for="id-notes">{% trans 'Complaint Notes' %}:</label>
+                <textarea id="id-notes" name="notes" cols="40" rows="12" ></textarea>
+            </div>
+        </div>
+
+        <table align="center" width="35%">
+            <tr>
+                <td align="center">
+                    <a href="#" data-role="button" data-rel="back" id="wo-BackBtn" class="std-buttons">{% trans 'Back' %}</a>
+                </td>
+                <td align="center">
+                    <a href="#" data-role="button" id="resident-complaint-create-next-btn" class="std-buttons">{% trans 'Add Complaint' %}</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="resident-complaint-confirmation-page" data-role="page" data-theme="c">
+        <div data-role="header" style="background: #006633">
+        <br />
+        <br />
+        <br />
+        <br />
+    </div>
+        <div id="wo-confirm-Panel" style="text-align:center" >
+
+            <p></p>
+            <h1> {%  trans "Your complaint has been successfully processed" %}</h1>
+
+            <div>
+                A message with the newly added resident complaint information was sent to your email address, the landlord and the CA
+            </div>
+
+            <p></p>
+            <div class="confirmation-commands">
+                <fieldset class="ui-grid-b">
+                    <div class="ui-block-a"><a href="#"  id="wo-add-more-btn" data-role="button" class="std-buttons"> {% trans 'Add More Complaints' %} </a></div>
+                    <div class="ui-block-b"><a href="#" id="wo-done-log-out-btn" data-role="button" class="std-buttons">{% trans 'Done - Log Out' %}</a></div>
+                </fieldset>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="selection_dlg" data-role="page" data-theme="c">
+        <div data-role="header" style="background: #006633">
+            <h1>Action Selection</h1>
+        </div>
+
+        <div data-role="content" data-theme="c">
+            <h4 id="dialog_text">Please, choose an action to perform</h4>
+            <div class=" ui-grid-a" data-theme="a">
+                <div class="ui-block-a" style="width: 45%">
+                    <a href="#" id="add-new-resident_complaint" data-role="button" class="std-buttons">Add New Complaint</a>
+                </div>
+                <div class="ui-block-b" style="width: 55%">
+                    <a href="#" id="check-status-resident-complaints" data-role="button">View Complaints' Status</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="resident-complaint-status-grid-page" data-role="page" data-theme="c">
+        <div id="wo-page"></div>
+
+        <p></p>
+        <div class="confirmation-commands">
+            <fieldset class="ui-grid-b">
+                <div class="ui-block-a"><a href="#"  id="open-wo-back-btn" data-role="button" class="std-buttons"> {% trans 'Back' %} </a></div>
+                <div class="ui-block-b"><a href="#" id="open-wo-done-log-out-btn" data-role="button" class="std-buttons">{% trans 'Done - Log Out' %}</a></div>
+            </fieldset>
+        </div>
+
+    </div>
+
+{%  endblock %}
 </body>
 </html>
