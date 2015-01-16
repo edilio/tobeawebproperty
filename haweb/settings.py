@@ -157,7 +157,7 @@ THIRD_PARTY_APPS = (
     'rest_framework',
     'robots',
     'rest_framework_swagger',
-
+    'bootstrap3',
 )
 
 OWN_APPS = (

@@ -13,3 +13,4 @@ django-robots==1.0
 Pillow==2.6.1
 pygeocoder==1.2.5
 django-localflavor==1.0
+django-bootstrap3==5.0.3

@@ -3,50 +3,71 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Import Housing and Contracts</title>
+    {% load bootstrap3 %}
+    {% bootstrap_css %}
 </head>
 <body>
-    <h1>Import Housing and Contracts</h1>
-    <div id="message-bar">
-        {{ message }}
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <div class="jumbotron">
+                    <h1>Import Housing and Contracts</h1>
+                    {%  if message %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ message }}
+                        </div>
+                    {%  endif %}
+                    <p>File Format is CSV</p>
+                    <form action="{% url 'import_view' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+                        <table>
+                            <tr>
+                                <th>
+                                    <label for="id_file">Csv File:</label>
+                                </th>
+                                <td>
+                                    <input id="id_file" type="file" name="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="row">
+                            Active Contracts <input class="btn btn-primary btn-large" type="submit" name="active-contracts" value="Import" />
+                            <div class="alert alert-info" role="alert">
+                                <small>
+                                    The structure of the file for Active Contracts should be like:<br/>
+                                    [tenant_id], first_name, mi, last_name, email, cell_phone, home_phone, work_phone, first_day, last_day, unit_id or address, apartment, city, state, zip_code
+                                </small>
+                            </div>
+                            New Admissions <input class="btn btn-primary btn-large" type="submit" name="new-admissions" value="Import" />
+                            <div class="alert alert-info" role="alert">
+                                <small>
+                                    The structure of the file for New Admissions should be like:<br/>
+                                    [tenant_id], first_name, mi, last_name, email, cell_phone, home_phone, work_phone, first_day, last_day, unit_id or address, apartment, city, state, zip_code
+                                </small>
+                            </div>
+                            Move outs <input class="btn btn-primary btn-large" type="submit" name="move-outs" value="Import" />
+                            <div class="alert alert-info" role="alert">
+                                <small>
+                                    The structure of the file for Move Outs should be like:<br/>
+                                    [tenant_id] or [first_name, mi, last_name], unit_id or [address, apartment, city, state, zip_code], move_out_day
+                                </small>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class='span12'>
+                                <hr>
+                            </div>
+                            <input class="btn btn-primary btn-large" type="submit" name="export" value="Export Contracts"/>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
     </div>
-    <p>File Format is CSV</p>
-    <form action="{% url 'import_view' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
-        <table>
-            <tr>
-                <th>
-                    <label for="id_file">File:</label>
-                </th>
-                <td>
-                    <input id="id_file" type="file" name="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
-                </td>
-            </tr>
-        </table>
-        <ul>
-            <li>
-                Active Contracts <input type="submit" name="active-contracts" value="Import" />
-                <div class="hint">
-                    The structure of the file should be like:<br/>
-                    [tenant_id], first_name, mi, last_name, email, cell_phone, home_phone, work_phone, first_day, last_day, unit_id or address, apartment, city, state, zip_code
-                </div>
-            </li>
-            <li>
-                Import New Admissions <input type="submit" name="new-admissions" value="Import" />
-                <div class="hint">
-                    The structure of the file should be like:<br/>
-                    [tenant_id], first_name, mi, last_name, email, cell_phone, home_phone, work_phone, first_day, last_day, unit_id or address, apartment, city, state, zip_code
-                </div>
-            </li>
-            <li>
-                Import Move outs <input type="submit" name="move-outs" value="Import" />
-                <div class="hint">
-                    The structure of the file should be like:<br/>
-                    [tenant_id] or [first_name, mi, last_name], unit_id or [address, apartment, city, state, zip_code], move_out_day
-                </div>
-            </li>
-        </ul>
 
-        <input type="submit" name="export" value="Export Contracts"/>
-    </form>
-
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    {% bootstrap_javascript %}
 </body>
 </html>
