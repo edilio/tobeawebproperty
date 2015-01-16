@@ -165,7 +165,7 @@ def import_new_admissions(filename):
     The structure of the file should be like:
     [tenant_id], first_name, mi, last_name, email, cell_phone, home_phone, work_phone, first_day, last_day, unit_id or
         address, apartment, city, state, zip_code
-    :param filename: can be an string representing the full path of the file or a filte from django
+    :param filename: can be an string representing the full path of the file or a file from django
     :return:
     """
     def real_import(reader):
@@ -182,8 +182,11 @@ def import_new_admissions(filename):
                 unit = import_unit(column_pos, row)
                 first_day = row[column_pos['first_day']]
                 last_day = row[column_pos['last_day']]
-                # current_tenant = unit.current_tenant
-                contract = Contract.objects.create(tenant=tenant, unit=unit, first_day=first_day, last_day=last_day)
+                active_contracts = unit.active_contracts(first_day, last_day)
+                for contract in active_contracts:
+                    contract.move_out_date = first_day
+                    contract.save()
+                Contract.objects.create(tenant=tenant, unit=unit, first_day=first_day, last_day=last_day)
             i += 1
 
     required_fields = ['tenant_id', 'first_name', 'mi', 'last_name', 'email', 'cell_phone', 'home_phone',

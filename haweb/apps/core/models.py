@@ -48,6 +48,29 @@ class Unit(models.Model):
     apartment = models.CharField(max_length=7, null=True, blank=True)
     zip_code = models.ForeignKey(ZipCode)
 
+    @property
+    def current_contract(self):
+        now = timezone.now()
+        contracts = self.contracts.filter(first_day__lt=now, last_day__gt=now)
+        if contracts.exists():
+            return contracts[0]
+        else:
+            return None
+
+    @property
+    def current_tenant(self):
+        contract = self.current_contract
+        if contract:
+            return contract.tenant
+        else:
+            return None
+
+    def active_contracts(self, first_day, last_day):
+        # test a real active contracts based on http://c2.com/cgi/wiki?TestIfDateRangesOverlap
+        # ( start1 <= end2 and start2 <= end1 )
+        contracts = self.contracts.filter(first_day__lte=last_day, last_day__gte=first_day)
+        return contracts
+
     def __unicode__(self):
         if self.apartment:
             return "{}, {}".format(self.apartment, self.address)
@@ -86,7 +109,7 @@ class Contract(models.Model):
     move_out_date = models.DateField(null=True, blank=True)
 
     tenant = models.ForeignKey(Tenant)
-    unit = models.ForeignKey(Unit)
+    unit = models.ForeignKey(Unit, related_name="contracts")
 
     @property
     def move_out(self):
