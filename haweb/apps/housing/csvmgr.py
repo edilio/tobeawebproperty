@@ -165,16 +165,12 @@ def import_new_admissions(filename):
     The structure of the file should be like:
     [tenant_id], first_name, mi, last_name, email, cell_phone, home_phone, work_phone, first_day, last_day, unit_id or
         address, apartment, city, state, zip_code
-    :param filename:
+    :param filename: can be an string representing the full path of the file or a filte from django
     :return:
     """
-    required_fields = ['tenant_id', 'first_name', 'mi', 'last_name', 'email', 'cell_phone', 'home_phone',
-                       'work_phone', 'first_day', 'last_day', 'unit_id',
-                       'address', 'apartment', 'city', 'state', 'zip_code']
-    with open(filename, 'rb') as csvfile:
-        rows = csv.reader(csvfile, dialect='excel')
+    def real_import(reader):
         i = 0
-        for row in rows:
+        for row in reader:
             if i == 0:
                 row0 = row
 
@@ -189,6 +185,17 @@ def import_new_admissions(filename):
                 # current_tenant = unit.current_tenant
                 contract = Contract.objects.create(tenant=tenant, unit=unit, first_day=first_day, last_day=last_day)
             i += 1
+
+    required_fields = ['tenant_id', 'first_name', 'mi', 'last_name', 'email', 'cell_phone', 'home_phone',
+                       'work_phone', 'first_day', 'last_day', 'unit_id',
+                       'address', 'apartment', 'city', 'state', 'zip_code']
+    if isinstance(filename, str):
+        with open(filename, 'rb') as csvfile:
+            rows = csv.reader(csvfile, dialect='excel')
+            real_import(rows)
+    else:
+        rows = csv.reader(filename, dialect='excel')
+        real_import(rows)
 
 
 def import_move_outs(filename):
@@ -226,20 +233,36 @@ def export_housing():
     return ""
 
 
-def export_active_tenants(filename):
-    now = timezone.now()
-    active_contracts = Contract.objects.filter(first_day__lt=now, last_day__gt=now)
-    with open(filename, 'wb') as f:
-        writer = csv.writer(f)
+def value(x):
+    if x:
+        return x
+    else:
+        return ""
+
+
+def export_active_tenants(filename_or_response):
+    """
+    :param filename: can be a real filename or a django response
+    :return:
+    """
+    def export(writer):
+        now = timezone.now()
+        active_contracts = Contract.objects.filter(first_day__lt=now, last_day__gt=now)
         for contract in active_contracts:
             tenant = contract.tenant
             unit = contract.unit
             code = unit.zip_code
-            row = [tenant.tenant_id, tenant.first_name, tenant.mi, tenant.last_name, tenant.email,
-                   tenant.cell_phone, tenant.home_phone, tenant.work_phone,
+            row = [value(tenant.tenant_id), tenant.first_name, tenant.mi, tenant.last_name, tenant.email,
+                   value(tenant.cell_phone), value(tenant.home_phone), value(tenant.work_phone),
                    contract.first_day.strftime('%Y-%m-%d'), contract.last_day.strftime('%Y-%m-%d'),
-                   unit.unit_id,
-                   unit.address, unit.apartment, code.city.name, code.state, code.zip_code]
+                   value(unit.unit_id),
+                   unit.address, value(unit.apartment), code.city.name, code.state, code.zip_code]
             print(row)
             writer.writerow(row)
-    print('test')
+
+    if isinstance(filename_or_response, str):
+        with open(filename_or_response, 'wb') as f:
+            csv.writer(f)
+    else:
+        w = csv.writer(filename_or_response, dialect='excel')
+        export(w)
