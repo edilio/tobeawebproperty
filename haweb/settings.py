@@ -164,6 +164,9 @@ THIRD_PARTY_APPS = (
 OWN_APPS = (
     'haweb.apps.core',
     'haweb.apps.web',
+    'haweb.apps.issues',
+    'haweb.apps.workorder',
+    'haweb.apps.housing'
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + OWN_APPS
