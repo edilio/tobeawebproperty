@@ -137,7 +137,7 @@ TEMPLATE_DIRS = (
 )
 
 DJANGO_APPS = (
-     'django.contrib.auth',
+    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
@@ -156,7 +156,6 @@ DJANGO_APPS = (
 THIRD_PARTY_APPS = (
     'rest_framework',
     'robots',
-    'debug_toolbar',
     'rest_framework_swagger',
 
 )
@@ -250,3 +249,5 @@ if IN_QA or IN_TEST:
     # database overrides
     DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
     DATABASES['default']['NAME'] = ':memory:'
+elif IN_DEV and DEBUG:
+    INSTALLED_APPS += ('debug_toolbar', )
