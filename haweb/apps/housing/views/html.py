@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
-from .forms import UploadFileForm
-from .csvmgr import (import_active_contracts,
+from ..forms import UploadFileForm
+from ..csvmgr import (import_active_contracts,
                      import_new_admissions,
                      import_move_outs,
                      export_active_tenants,

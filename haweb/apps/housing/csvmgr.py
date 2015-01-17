@@ -326,7 +326,8 @@ def export_active_tenants(filename_or_response):
 
     if isinstance(filename_or_response, str):
         with open(filename_or_response, 'wb') as f:
-            csv.writer(f)
+            w = csv.writer(f, dialect='excel')
+            export(w)
     else:
         w = csv.writer(filename_or_response, dialect='excel')
         export(w)

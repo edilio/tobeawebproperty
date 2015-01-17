@@ -32,6 +32,7 @@ urlpatterns = patterns('',
     url(r'^issues/', include('haweb.apps.issues.urls')),
     # housing
     url(r'^housing/', include('haweb.apps.housing.urls.html')),
+    url(r'^housing/api/v1/', include('haweb.apps.housing.urls.api')),
     # Api
     url(r'^api/v1/', include('haweb.apps.web.urls.api')),
     url(r'^api/v1/docs/', include('rest_framework_swagger.urls')),
