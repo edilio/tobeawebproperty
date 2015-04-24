@@ -25,7 +25,7 @@ def next_index(model_name, app='web'):
         m = qs.reverse()[0]
         result = m.index
     except:
-            pass
+        pass
     return result
 
 

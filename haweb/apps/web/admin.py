@@ -75,6 +75,8 @@ class MenuAdmin(admin.ModelAdmin):
 @admin.register(Content)
 class ContentAdmin(TinymceAdmin):
     list_display = ('title', 'slug', 'created_by', 'created_on', 'modified_by', 'modified_on')
+    list_filter = ('created_by', 'created_on')
+    search_fields = ('title', 'slug')
 
     def save_model(self, request, obj, form, change):
         try:
