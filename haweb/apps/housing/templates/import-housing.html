@@ -5,6 +5,12 @@
     <title>Import Housing and Contracts</title>
     {% load bootstrap3 %}
     {% bootstrap_css %}
+    <style>
+        body{
+            margin-top: 10px;
+        }
+    </style>
+
 </head>
 <body>
     <div class="container">
@@ -30,21 +36,21 @@
                             </tr>
                         </table>
                         <div class="row">
-                            Active Contracts <input class="btn btn-primary btn-large" type="submit" name="active-contracts" value="Import" />
+                            <input class="btn btn-primary btn-large" type="submit" name="active-contracts" value="Import Active Contracts" />
                             <div class="alert alert-info" role="alert">
                                 <small>
                                     The structure of the file for Active Contracts should be like:<br/>
                                     [tenant_id], first_name, mi, last_name, email, cell_phone, home_phone, work_phone, first_day, last_day, unit_id or address, apartment, city, state, zip_code
                                 </small>
                             </div>
-                            New Admissions <input class="btn btn-primary btn-large" type="submit" name="new-admissions" value="Import" />
+                            <input class="btn btn-primary btn-large" type="submit" name="new-admissions" value="Import New Admissions" />
                             <div class="alert alert-info" role="alert">
                                 <small>
                                     The structure of the file for New Admissions should be like:<br/>
                                     [tenant_id], first_name, mi, last_name, email, cell_phone, home_phone, work_phone, first_day, last_day, unit_id or address, apartment, city, state, zip_code
                                 </small>
                             </div>
-                            Move outs <input class="btn btn-primary btn-large" type="submit" name="move-outs" value="Import" />
+                            <input class="btn btn-primary btn-large" type="submit" name="move-outs" value="Import Move outs" />
                             <div class="alert alert-info" role="alert">
                                 <small>
                                     The structure of the file for Move Outs should be like:<br/>
