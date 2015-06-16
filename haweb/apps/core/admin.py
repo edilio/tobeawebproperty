@@ -15,7 +15,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ('username', )
+        fields = ('email', )
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -57,9 +57,12 @@ class UserProfileAdmin(UserAdmin):
     add_form = UserCreationForm
     model = UserProfile
 
+    list_display = ('email', 'first_name', 'last_name', 'is_staff')
+    ordering = ('email',)
+
     fieldsets = (
-        (None, {'fields': ('username', 'password')}),
-        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
+        (None, {'fields': ('email', 'password')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name')}),
         (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
                                        'groups', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
@@ -72,6 +75,7 @@ class UserProfileAdmin(UserAdmin):
 @admin.register(City)
 class CityAdmin(admin.ModelAdmin):
     list_display = ('name', )
+    search_fields = ('name', )
 
 
 @admin.register(ZipCode)
