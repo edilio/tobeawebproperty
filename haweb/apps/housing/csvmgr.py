@@ -170,6 +170,7 @@ def import_new_admissions(filename):
     """
     def real_import(reader):
         i = 0
+        new_contracts = []
         for row in reader:
             if i == 0:
                 row0 = row
@@ -186,8 +187,10 @@ def import_new_admissions(filename):
                 for contract in active_contracts:
                     contract.move_out_date = first_day
                     contract.save()
-                Contract.objects.create(tenant=tenant, unit=unit, first_day=first_day, last_day=last_day)
+                c = Contract.objects.create(tenant=tenant, unit=unit, first_day=first_day, last_day=last_day)
+                new_contracts.append(c.id)
             i += 1
+        return new_contracts
 
     required_fields = ['tenant_id', 'first_name', 'mi', 'last_name', 'email', 'cell_phone', 'home_phone',
                        'work_phone', 'first_day', 'last_day', 'unit_id',
@@ -231,7 +234,7 @@ def import_move_outs(filename):
                     contract.move_out_date = move_out_day
                     contract.save()
                 else:
-                    active_contracts = Contract.objecta.filter(tenant=tenant, unit=unit).order_by('-last_day')
+                    active_contracts = Contract.objects.filter(tenant=tenant, unit=unit).order_by('-last_day')
                     if active_contracts.exists():
                         contract = active_contracts[0]
                         contract.move_out_date = move_out_day
@@ -254,9 +257,14 @@ def import_active_contracts(filename):
         address, apartment, city, state, zip_code
     :param filename:
     :return:
+    Full update ==> only the contracts in this csv will be active now
     """
-    # todo
-    pass
+    new_contracts = import_new_admissions(filename)
+    now = timezone.now()
+    for c in Contract.active_contracts.all():
+        if c.id not in new_contracts:
+            c.last_day = now - 1
+            c.save()
 
 
 def import_housing(filename):

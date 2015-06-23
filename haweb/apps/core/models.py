@@ -62,7 +62,6 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
-
     def save(self, *args, **kwargs):
         self.edit_date = timezone.now()
         super(UserProfile, self).save(*args, **kwargs)
@@ -173,6 +172,12 @@ class Tenant(models.Model):
             return self.order_on
 
 
+class ActiveContractsManager(models.Manager):
+    def get_queryset(self):
+        now = timezone.now()
+        return super(ActiveContractsManager, self).get_queryset().filter(first_day__lte=now, last_day__gte=now)
+
+
 class Contract(models.Model):
     first_day = models.DateField()
     last_day = models.DateField()
@@ -180,6 +185,8 @@ class Contract(models.Model):
 
     tenant = models.ForeignKey(Tenant)
     unit = models.ForeignKey(Unit, related_name="contracts")
+
+    active_contracts = ActiveContractsManager()
 
     @property
     def move_out(self):
