@@ -4,10 +4,10 @@ from django.http import HttpResponse
 
 from ..forms import UploadFileForm
 from ..csvmgr import (import_active_contracts,
-                     import_new_admissions,
-                     import_move_outs,
-                     export_active_tenants,
-                     export_housing)
+                      import_new_admissions,
+                      import_move_outs,
+                      export_active_tenants,
+                      export_housing)
 
 
 def gen_csv_response(name, method):
@@ -29,6 +29,10 @@ def import_view(request):
             if form.is_valid():
                 if request.POST.get('new-admissions'):
                     import_new_admissions(form.cleaned_data['file'])
+                elif request.POST.get('active-contracts'):
+                    import_active_contracts(form.cleaned_data['file'])
+                elif request.POST.get('move-outs'):
+                    import_move_outs(form.cleaned_data['file'])
                 message = "Successful import"
             else:
                 message = "CSV file is required to do the import!!!"

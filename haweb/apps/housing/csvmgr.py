@@ -238,7 +238,6 @@ def import_move_outs(filename):
                         contract.save()
             i += 1
 
-
     if isinstance(filename, str):
         with open(filename, 'rb') as csvfile:
             rows = csv.reader(csvfile, dialect='excel')
