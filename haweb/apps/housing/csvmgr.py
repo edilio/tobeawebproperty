@@ -266,8 +266,30 @@ def import_housing(filename):
     :param filename:
     :return:
     """
-    # todo
-    pass
+    required_fields = ['unit_id', 'address', 'apartment', 'city', 'state', 'zip_code']
+
+    def real_import(reader):
+        i = 0
+        column_pos = {}
+        for row in reader:
+            if i == 0:
+                row0 = row
+
+                ok, column_pos = validate_csv(row0, required_fields)
+                if not ok:
+                    raise Exception('Required fields are not present in the documents')
+            else:
+                import_unit(column_pos, row)
+
+            i += 1
+
+    if isinstance(filename, str):
+        with open(filename, 'rb') as csvfile:
+            rows = csv.reader(csvfile, dialect='excel')
+            real_import(rows)
+    else:
+        rows = csv.reader(filename, dialect='excel')
+        real_import(rows)
 
 
 def value(x):
