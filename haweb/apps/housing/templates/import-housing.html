@@ -57,10 +57,20 @@
                                     [tenant_id] or [first_name, mi, last_name], unit_id or [address, apartment, city, state, zip_code], move_out_day
                                 </small>
                             </div>
+
+                            <input class="btn btn-primary btn-large" type="submit" name="import-housing" value="Import Housing Structure"/>
+                            <div class="alert alert-info" role="alert">
+                                <small>
+                                    The structure of the file for Move Outs should be like:<br/>
+                                    [unit_id], [address], [apartment], [city], [state], [zip_code]
+                                </small>
+                            </div>
                         </div>
                         <div class="row">
                             <input class="btn btn-primary btn-large" type="submit" name="export-contracts" value="Export Contracts"/>
                             <input class="btn btn-primary btn-large" type="submit" name="export-housing" value="Export Housing Structure"/>
+                            <hr>
+
                         </div>
 
                     </form>

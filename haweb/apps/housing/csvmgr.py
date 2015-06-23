@@ -255,6 +255,7 @@ def import_active_contracts(filename):
     :param filename:
     :return:
     """
+    # todo
     pass
 
 
@@ -265,6 +266,7 @@ def import_housing(filename):
     :param filename:
     :return:
     """
+    # todo
     pass
 
 
